@@ -42,3 +42,4 @@ defmodule Agrex.Registry do
   end
 
 end
+

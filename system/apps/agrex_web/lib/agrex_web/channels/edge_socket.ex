@@ -1,6 +1,9 @@
 defmodule AgrexWeb.EdgeSocket do
   use Phoenix.Socket
 
+  require Logger
+  import LogHelper
+
   # A Socket handler
   #
   # It's possible to control the websocket connection and
@@ -35,8 +38,13 @@ defmodule AgrexWeb.EdgeSocket do
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
   @impl true
-  def connect(params, socket, _connect_info) do
-    {:ok, assign(socket, :edge_id, params.edge_id)}
+  def connect(params, socket, connect_info) do
+
+    Logger.alert("EdgeSocket connect params: #{inspect(params)}")
+    Logger.alert("EdgeSocket connect socket: #{inspect(socket)}")
+    Logger.alert("EdgeSocket connect connect_info: #{inspect(connect_info)}")
+    # assign(socket, :edge_id, params.edge_id)
+    {:ok, socket}
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
@@ -51,5 +59,6 @@ defmodule AgrexWeb.EdgeSocket do
   # Returning `nil` makes this socket anonymous.
   @impl true
   def id(socket),
-    do: "edge_socket:#{socket.assigns.edge_id}"
+    do: "edge_socket"
+    # do: "edge_socket:#{socket.assigns.edge_id}"
 end

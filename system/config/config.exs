@@ -9,8 +9,12 @@
 # move said applications out of the umbrella.
 import Config
 
-config :agrex_edge, Agrex.Life.Channel,
-  uri: "ws://localhost:4000/socket/edge_socket",
+
+# Configure the Agrex application socket communication,
+# please note the "websocket" part of the URI, this is
+# required for the socket to work.
+config :agrex_edge, Agrex.Life.Client,
+  uri: "ws://localhost:4000/edge_socket/websocket",
   reconnect_after_msec: [200, 500, 1_000, 2_000]
 
 

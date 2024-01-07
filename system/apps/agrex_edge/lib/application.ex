@@ -5,8 +5,9 @@ defmodule Agrex.Edge.Application do
 
   @moduledoc false
 
-  @default_landscape_params
-  [
+  @default_edge_id "edge_1"
+
+  @default_landscape_params [
     name: "farm_scape",
     nbr_of_regions: Agrex.Limits.max_regions(),
     min_area: 30_000,
@@ -21,14 +22,14 @@ defmodule Agrex.Edge.Application do
     children = [
       # Start Finch
       {Finch, name: Agrex.Finch},
-      # Start the countries cache
       {Agrex.Countries.Cache, name: Agrex.Countries},
+      {Agrex.Life.Client, @default_edge_id},
       # Start Landscape System
       # {Agrex.Landscape.System, @default_landscape_params},
       # {Agrex.Herd.System, Agrex.Herd.Params.random()},
-      {Agrex.Life.System, Agrex.Life.State.random(@default_vector)},
-      {Agrex.Life.System, Agrex.Life.State.random(@default_vector)},
-      {Agrex.Life.System, Agrex.Life.State.random(@default_vector)}
+      {Agrex.Life.System, Agrex.Life.State.random(@default_edge_id, @default_vector)},
+      {Agrex.Life.System, Agrex.Life.State.random(@default_edge_id, @default_vector)},
+      {Agrex.Life.System, Agrex.Life.State.random(@default_edge_id, @default_vector)}
     ]
 
     Supervisor.start_link(children,

@@ -1,6 +1,7 @@
 defmodule AgrexWeb.FarmChannel do
   use AgrexWeb, :channel
 
+
   @impl true
   def join("farm:lobby", payload, socket) do
     if authorized?(payload) do
@@ -29,4 +30,6 @@ defmodule AgrexWeb.FarmChannel do
   defp authorized?(_payload) do
     true
   end
+
+
 end

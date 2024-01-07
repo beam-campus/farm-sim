@@ -8,7 +8,6 @@ defmodule Agrex.Life.System do
   The Life System is a GenServer that manages the
   Life Worker and Life Channel
   """
-
   ######### API #####################
 
   def live(life_id),
@@ -21,6 +20,12 @@ defmodule Agrex.Life.System do
     Supervisor.stop(via_sup(life_id), reason: :normal)
     GenServer.stop(via(life_id), reason: :normal)
   end
+
+  def via(life_id),
+    do: Agrex.Registry.via_tuple({:worker, to_name(life_id)})
+
+  def via_sup(life_id),
+    do: Agrex.Registry.via_tuple({:supervisor, to_name(life_id)})
 
   def child_spec(state) do
     %{
@@ -61,11 +66,6 @@ defmodule Agrex.Life.System do
   end
 
   ########################## INTERNALS ########################################
-  defp via(life_id),
-    do: Agrex.Registry.via_tuple({:worker, to_name(life_id)})
-
-  defp via_sup(life_id),
-    do: Agrex.Registry.via_tuple({:supervisor, to_name(life_id)})
 
   defp to_name(life_id),
     do: "life.system.#{life_id}"
@@ -73,7 +73,6 @@ defmodule Agrex.Life.System do
   defp do_supervise(state) do
     Supervisor.start_link(
       [
-        {Agrex.Life.Channel, state.life.id},
         {Agrex.Life.Worker, state}
       ],
       name: via_sup(state.life.id),

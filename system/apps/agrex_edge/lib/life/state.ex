@@ -10,6 +10,7 @@ defmodule Agrex.Life.State do
 
   @primary_key false
   embedded_schema do
+    field :edge_id, :string
     field :field_id, :string
     embeds_one :life, Agrex.Schema.Life
     embeds_one :pos, Agrex.Schema.Vector
@@ -17,8 +18,9 @@ defmodule Agrex.Life.State do
     field :ticks, :integer
   end
 
-  def random(%{x: x, y: y, z: z} = _vector) do
+  def random(edge_id, %{x: x, y: y, z: z} = _vector) do
     %Agrex.Life.State{
+      edge_id: edge_id,
       field_id: Id.new("field", to_string(z)) |> Id.as_string(),
       life: Agrex.Schema.Life.random(),
       pos: Agrex.Schema.Position.random(x, y),
