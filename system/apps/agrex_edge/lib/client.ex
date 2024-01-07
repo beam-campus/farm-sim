@@ -10,6 +10,15 @@ defmodule Agrex.Life.Client do
   """
 
   ############# API ################
+  def join_edge(edge_id) do
+    GenServer.cast(
+      via(edge_id),
+      {:join_edge, edge_id}
+    )
+  end
+
+
+
   def emit_born(fact) do
     GenServer.cast(
       via(fact.farm.id),
@@ -43,6 +52,7 @@ defmodule Agrex.Life.Client do
     c_res = connect(config)
     case c_res do
       {:ok, socket} ->
+        Logger.debug("Life.Client connected for #{edge_id} socket: #{inspect(socket)}")
         {:ok, socket}
 
       {:error, reason} ->
@@ -57,8 +67,10 @@ defmodule Agrex.Life.Client do
 
   @impl Slipstream
   def handle_connect(socket) do
-    Logger.debug("Life.Client connected for #{socket.assigns.edge_id}}")
+    Logger.debug("Life.Client connected for #{inspect(socket)}")
     {:ok, socket}
+    # Logger.debug("Life.Client connected for #{socket.assigns.edge_id}}")
+    # {:ok, socket}
   end
 
   @impl Slipstream
@@ -67,10 +79,21 @@ defmodule Agrex.Life.Client do
     {:noreply, socket}
   end
 
+
   @impl Slipstream
   def handle_cast({:emit_born, fact}, socket) do
-    Logger.debug("Life.Client #{socket.assigns.edge_id} emitting born fact: #{inspect(fact)}")
+    Logger.debug("Life.Client #{inspect(socket)}")
     {:noreply, socket}
+    # Logger.debug("Life.Client #{socket.assigns.edge_id} emitting born fact: #{inspect(fact)}")
+    # {:noreply, socket}
+  end
+
+  def handle_cast({:join_edge, edge_id}, socket) do
+    Logger.debug("Life.Client #{inspect(socket)}")
+    Slipstream.await_join(socket, "life:#{edge_id}")
+    {:noreply, socket}
+    # Logger.debug("Life.Client #{socket.assigns.edge_id} emitting born fact: #{inspect(fact)}")
+    # {:noreply, socket}
   end
 
   ############# INTERNALS ################

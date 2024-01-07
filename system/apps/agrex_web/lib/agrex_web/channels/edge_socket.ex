@@ -61,4 +61,6 @@ defmodule AgrexWeb.EdgeSocket do
   def id(socket),
     do: "edge_socket"
     # do: "edge_socket:#{socket.assigns.edge_id}"
+
+    
 end

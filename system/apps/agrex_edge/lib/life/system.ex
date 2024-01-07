@@ -73,6 +73,7 @@ defmodule Agrex.Life.System do
   defp do_supervise(state) do
     Supervisor.start_link(
       [
+        {Agrex.Life.Emitter, state},
         {Agrex.Life.Worker, state}
       ],
       name: via_sup(state.life.id),

@@ -27,11 +27,8 @@ defmodule Agrex.Edge.Application do
       # Start Landscape System
       # {Agrex.Landscape.System, @default_landscape_params},
       # {Agrex.Herd.System, Agrex.Herd.Params.random()},
-      {Agrex.Life.System, Agrex.Life.State.random(@default_edge_id, @default_vector)},
-      {Agrex.Life.System, Agrex.Life.State.random(@default_edge_id, @default_vector)},
       {Agrex.Life.System, Agrex.Life.State.random(@default_edge_id, @default_vector)}
     ]
-
     Supervisor.start_link(children,
       strategy: :one_for_one,
       name: __MODULE__

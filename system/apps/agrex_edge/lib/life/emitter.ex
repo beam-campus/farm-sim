@@ -25,29 +25,29 @@ defmodule Agrex.Life.Emitter do
   def via(life_id),
     do: Agrex.Registry.via_tuple({:emitter, to_name(life_id)})
 
-  def child_spec(life_id) do
+  def child_spec(state) do
     %{
-      id: via(life_id),
-      start: {__MODULE__, :start_link, [life_id]},
+      id: via(state.life.id),
+      start: {__MODULE__, :start_link, [state]},
       type: :worker,
       restart: :transient
     }
   end
 
-  def start_link(life_id) do
+  def start_link(state) do
     res =
       GenServer.start_link(
         __MODULE__,
-        nil,
-        name: via(life_id)
+        state,
+        name: via(state)
       )
-
     log_res(res)
   end
 
   ############ CALLBACKS ###########
   @impl GenServer
   def init(state) do
+    Agrex.Life.Client.join_edge(state.edge_id)
     {:ok, state}
   end
 
