@@ -1,0 +1,20 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../rgfaber/compose-dev-stack"
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"Cronlike"
+		],
+		"obsSwitcher.address": "localhost:4455",
+		"obsSwitcher.autoConnect": true,
+		"obsSwitcher.fileNames": [			
+			"*.env*"
+		]
+	}
+}

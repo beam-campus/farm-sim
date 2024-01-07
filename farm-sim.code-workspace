@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"Cronlike"
+		],
+		"obsSwitcher.address": "localhost:4455",
+		"obsSwitcher.autoConnect": true,
+		"obsSwitcher.fileNames": [			
+			"*.env*"
+		]
+	}
+}

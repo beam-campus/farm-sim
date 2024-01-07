@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../rgfaber/compose-dev-stack"
+		},
+		{
+			"path": "../../../../farmtrace/ftdp-docktrace-ele"
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"Cronlike"
+		],
+		"obsSwitcher.address": "localhost:4455",
+		"obsSwitcher.autoConnect": true,
+		"obsSwitcher.fileNames": [			
+			"*.env*"
+		]
+	}
+}
