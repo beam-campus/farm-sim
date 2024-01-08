@@ -2,7 +2,7 @@ defmodule AgrexWeb.EdgeSocket do
   use Phoenix.Socket
 
   require Logger
-  import LogHelper
+  
 
   # A Socket handler
   #
@@ -62,5 +62,5 @@ defmodule AgrexWeb.EdgeSocket do
     do: "edge_socket"
     # do: "edge_socket:#{socket.assigns.edge_id}"
 
-    
+
 end

@@ -1,12 +1,17 @@
 defmodule AgrexWeb.LifeChannel do
   use AgrexWeb, :channel
 
+  @moduledoc """
+  The LifeChannel is used to broadcast messages to all clients
+  """
+
+
   @impl true
   def join("life:lobby", payload, socket) do
-    if authorized?(payload) do
-      {:ok, socket}
-    else
+    if authorized?(payload) == false do
       {:error, %{reason: "unauthorized"}}
+    else
+      {:ok, socket}
     end
   end
 
@@ -30,6 +35,10 @@ defmodule AgrexWeb.LifeChannel do
 
   # Add authorization logic here as required.
   defp authorized?(_payload) do
-    true
+    r = :rand.uniform(10)
+    case r do
+      10 -> false
+      _ -> true
+    end
   end
 end
