@@ -11,17 +11,18 @@ defmodule Agrex.Schema.Robot do
     Id
   }
 
+  @status [
+    unknown: 0,
+    inactive: 1,
+    active: 2,
+    idle: 4,
+    milking: 8,
+    cleaning: 16
+  ]
 
-  @type robot_status_enum :: :unknown | :inactive | :active | :idle | :milking | :cleaning
-  def robot_status_enum(),
-    do: [
-      unknown: 0,
-      inactive: 1,
-      active: 2,
-      idle: 4,
-      milking: 8,
-      cleaning: 16
-    ]
+  def robot_status(key) do
+    @status[key]
+  end
 
   @primary_key false
   embedded_schema do
@@ -36,9 +37,9 @@ defmodule Agrex.Schema.Robot do
 
   defp id_prefix, do: "robot"
 
-  def start_milking(%Robot{} = robot, %Life{} = life) do
+  def start_milking(%Robot{} = robot, %Life{} = _life) do
     case changeset(robot, %{
-           status: robot.status || robot_status_enum()[:milking],
+           status: robot.status || robot_status(:milking)
          }) do
       %{valid?: true} = changeset ->
         new_robot =
@@ -59,7 +60,12 @@ defmodule Agrex.Schema.Robot do
   end
 
   def new(name) when is_bitstring(name) do
-    defaults = %{name: name, status: Status.unknown()}
+    defaults = %{
+      id: Id.new(id_prefix()) |> Id.as_string(),
+      name: name,
+      status: robot_status(:unknown)
+    }
+
     new(defaults)
   end
 

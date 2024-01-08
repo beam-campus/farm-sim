@@ -90,7 +90,9 @@ defmodule Agrex.Life.Client do
 
   def handle_cast({:join_edge, edge_id}, socket) do
     Logger.debug("Life.Client #{inspect(socket)}")
-    Slipstream.await_join(socket, "life:#{edge_id}")
+    res = Slipstream.await_join(socket, "life:#{edge_id}")
+    Logger.debug("Life.Client await_join #{inspect(res)}")
+    {:noreply, socket}
     {:noreply, socket}
     # Logger.debug("Life.Client #{socket.assigns.edge_id} emitting born fact: #{inspect(fact)}")
     # {:noreply, socket}

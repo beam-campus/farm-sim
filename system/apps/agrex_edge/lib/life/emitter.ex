@@ -41,6 +41,7 @@ defmodule Agrex.Life.Emitter do
         state,
         name: via(state)
       )
+
     log_res(res)
   end
 
