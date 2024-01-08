@@ -47,7 +47,6 @@ defmodule Agrex.Life.Worker do
     log_res(res)
   end
 
-
   ################# CALLBACKS #####################
   @impl GenServer
   def init(state) do
@@ -72,6 +71,7 @@ defmodule Agrex.Life.Worker do
       state
       |> Rules.calc_age()
       |> Rules.apply_age()
+
     {:noreply, do_process(state)}
   end
 
@@ -84,14 +84,20 @@ defmodule Agrex.Life.Worker do
     do: "life.worker.#{life_id}"
 
   defp do_live(state) do
-    Logger.debug("[#{state.life.name}] is alive at age #{state.vitals.age}.")
-    # live(state.life.id)
+    Logger.debug(
+      "[#{state.life.name}] status: [#{to_string(state.status)}] at age #{state.vitals.age}."
+    )
+
+    state
+    |> do_process()
+
     Agrex.Life.System.live(state.life.id)
     state
   end
 
   defp do_process(state) do
     state
+    |> do_process_status()
     |> do_process_health()
   end
 
@@ -99,6 +105,20 @@ defmodule Agrex.Life.Worker do
     if state.vitals.health <= 0 do
       Agrex.Life.System.die(state.life.id)
     end
+
+    state
+  end
+
+  defp do_process_status(state) do
+    if state.status == :unknown do
+      state.put_in(:status, :born)
+
+      Agrex.Life.Emitter.emit_born(
+        state.life.id,
+        Agrex.Life.BornFact.new(state.edge_id, state.life)
+      )
+    end
+
     state
   end
 
@@ -107,5 +127,4 @@ defmodule Agrex.Life.Worker do
     Agrex.Life.System.stop(state.life.id)
     state
   end
-
 end

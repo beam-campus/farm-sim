@@ -8,15 +8,29 @@ defmodule Agrex.Life.Emitter do
   import LogHelper
 
   ############ API ###########
-  def emit_born(life_id, {:emit_born, fact}) do
+  def emit_born(life_id, fact) do
     GenServer.cast(
       via(life_id),
       {:emit_born, fact}
     )
   end
 
-  def emit_died(life_id, {:emit_died, fact}) do
+  def await_emit_born(life_id, fact) do
+    GenServer.call(
+      via(life_id),
+      {:emit_born, fact}
+    )
+  end
+
+  def emit_died(life_id, fact) do
     GenServer.cast(
+      via(life_id),
+      {:emit_died, fact}
+    )
+  end
+
+  def await_emit_died(life_id, fact) do
+    GenServer.call(
       via(life_id),
       {:emit_died, fact}
     )
@@ -48,20 +62,32 @@ defmodule Agrex.Life.Emitter do
   ############ CALLBACKS ###########
   @impl GenServer
   def init(state) do
-    Agrex.Life.Client.join_edge(state.edge_id)
+    Agrex.Life.Client.await_join(state.edge_id)
     {:ok, state}
   end
 
   @impl GenServer
   def handle_cast({:emit_born, fact}, state) do
-    Agrex.Edge.Client.emit_born(fact)
+    Agrex.Life.Client.emit_born(state.edge_id, fact)
     {:noreply, state}
   end
 
   @impl GenServer
   def handle_cast({:emit_died, fact}, state) do
-    Agrex.Edge.Client.emit_died(fact)
+    Agrex.Life.Client.emit_died(state.edge_id, fact)
     {:noreply, state}
+  end
+
+  @impl GenServer
+  def handle_call({:emit_born, fact}, _from, state) do
+    res = Agrex.Life.Client.await_emit_born(state.edge_id, fact)
+    {:reply, res, state}
+  end
+
+  @impl GenServer
+  def handle_call({:emit_died, fact}, _from, state) do
+    res = Agrex.Life.Client.await_emit_died(state.edge_id, fact)
+    {:reply, res, state}
   end
 
   ############ INTERNALS ###########

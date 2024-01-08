@@ -2,7 +2,7 @@ defmodule AgrexWeb.EdgeSocket do
   use Phoenix.Socket
 
   require Logger
-  
+
 
   # A Socket handler
   #
@@ -58,7 +58,7 @@ defmodule AgrexWeb.EdgeSocket do
   #
   # Returning `nil` makes this socket anonymous.
   @impl true
-  def id(socket),
+  def id(_socket),
     do: "edge_socket"
     # do: "edge_socket:#{socket.assigns.edge_id}"
 

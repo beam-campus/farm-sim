@@ -16,6 +16,9 @@ defmodule Agrex.Life.State do
     embeds_one :pos, Agrex.Schema.Vector
     embeds_one :vitals, Agrex.Schema.Vitals
     field :ticks, :integer
+    field :status, Ecto.Enum,
+      values: [:unknown, :born, :alive, :dead],
+      default: :unknown
   end
 
   def random(edge_id, %{x: x, y: y, z: z} = _vector) do
