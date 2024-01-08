@@ -3,17 +3,20 @@ defmodule Agrex.Life.EmitterTest do
 
   @moduledoc """
   These are the tests for Agrex.Life.Emitter
-  """
+ """
 
   require Logger
   alias Agrex.Life.Emitter
 
+  @edge_id "edge-1"
+
   setup_all do
-    res = Agrex.Life.Client.start_link(%{edge_id: 123})
-    Logger.info("Agrex.Life.Client.start_link/1: #{inspect(res)}")
+    res = Agrex.Edge.Client.start_link(@edge_id)
+    Logger.info("Agrex.Edge.Client.start_link/1: #{inspect(res)}")
     res
   end
 
+  @tag :ignore_test
   test "that the Agrex.Life.Emitter module exists" do
     assert is_list(Agrex.Life.Emitter.module_info())
   end
@@ -36,7 +39,7 @@ defmodule Agrex.Life.EmitterTest do
     fact = %{name: "John", age: 30}
 
     # Act
-    result = EMitter.emit_died(life_id, {:emit_died, fact})
+    result = Emitter.emit_died(life_id, {:emit_died, fact})
 
     # Assert
     assert result == {:ok, {:emit_died, fact}}

@@ -11,10 +11,11 @@ defmodule AgrexWeb.EdgeSocket do
 
   ## Channels
   # Uncomment the following line to define a "room:*" topic
-  # pointing to the `AgrexWeb.FarmChannel`:
+  # pointing to the `AgrexWeb.EdgeChannel`:
   #
-  channel "farm:*", AgrexWeb.FarmChannel
+  channel "edge:*", AgrexWeb.EdgeChannel
   channel "life:*", AgrexWeb.LifeChannel
+  channel "my:*", AgrexWeb.MyChannel
   #
   # To create a channel file, use the mix task:
   #
@@ -39,7 +40,6 @@ defmodule AgrexWeb.EdgeSocket do
   # performing token verification on connect.
   @impl true
   def connect(params, socket, connect_info) do
-
     Logger.alert("EdgeSocket connect params: #{inspect(params)}")
     Logger.alert("EdgeSocket connect socket: #{inspect(socket)}")
     Logger.alert("EdgeSocket connect connect_info: #{inspect(connect_info)}")
@@ -58,9 +58,11 @@ defmodule AgrexWeb.EdgeSocket do
   #
   # Returning `nil` makes this socket anonymous.
   @impl true
-  def id(_socket),
-    do: "edge_socket"
+  def id(socket) do
+    Logger.alert("EdgeSocket id: #{inspect(socket)}")
+    "edge_socket"
     # do: "edge_socket:#{socket.assigns.edge_id}"
+  end
 
 
 end

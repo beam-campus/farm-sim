@@ -1,20 +1,20 @@
-defmodule Agrex.Life.ClientTest do
+defmodule Agrex.Edge.ClientTest do
   use ExUnit.Case, async: true
 
   @moduledoc """
-  Tests for Agrex.Life.Client
+  Tests for Agrex.Edge.Client
   """
-  doctest Agrex.Life.Client
+  doctest Agrex.Edge.Client
 
   @edge_id "edge-1"
   @default_vector %{x: 100, y: 100, z: 1}
 
-  alias Agrex.Life.Client
+  alias Agrex.Edge.Client
 
   setup_all do
     state = Agrex.Life.State.random(@edge_id, @default_vector)
     res = Client.start_link(state)
-    Logger.info("Agrex.Life.Client.start_link/1: #{inspect(res)}")
+    Logger.info("Agrex.Edge.Client.start_link/1: #{inspect(res)}")
     res
   end
 
@@ -27,7 +27,7 @@ defmodule Agrex.Life.ClientTest do
   test "that the Client Module has a child_spec/1 function" do
     assert Client.child_spec(@farm_id) == %{
       id: Client.via(@farm_id),
-      start: {Agrex.Life.Client, :start_link, [@farm_id]},
+      start: {Agrex.Edge.Client, :start_link, [@farm_id]},
       restart: :temporary,
       type: :worker
     }

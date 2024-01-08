@@ -1,22 +1,21 @@
 defmodule Agrex.Life.Rules do
+
+  @moduledoc """
+  Agrex.Life.Rules is the module that contains the rules for the Life
+  """
   @ticks_per_year 2
   @max_age 20
 
+  def calc_age(state)
+      when state.ticks == @ticks_per_year do
+    state = put_in(state.vitals.age, state.vitals.age + 1)
+    state = put_in(state.ticks, 0)
+    state
+  end
+
   def calc_age(state) do
     state = put_in(state.ticks, state.ticks + 1)
-
-    new_state =
-      case state.ticks do
-        @ticks_per_year ->
-          state = put_in(state.vitals.age, state.vitals.age + 1)
-          state = put_in(state.ticks, 0)
-          state
-
-        _ ->
-          state
-      end
-
-    new_state
+    state
   end
 
   def apply_age(state)
@@ -30,4 +29,7 @@ defmodule Agrex.Life.Rules do
     state = put_in(state.vitals.health, state.vitals.health + 1)
     state
   end
+
+  def apply_age(state),
+    do: state
 end

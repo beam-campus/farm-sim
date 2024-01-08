@@ -1,6 +1,10 @@
 defmodule Agrex.Life.Worker do
   use GenServer
 
+  @moduledoc """
+  Agrex.Life.Worker is the worker process that is spawned for each Life.
+  """
+
   require Logger
   import LogHelper
 
@@ -84,12 +88,13 @@ defmodule Agrex.Life.Worker do
     do: "life.worker.#{life_id}"
 
   defp do_live(state) do
+    state =
+      state
+      |> do_process()
+
     Logger.debug(
       "[#{state.life.name}] status: [#{to_string(state.status)}] at age #{state.vitals.age}."
     )
-
-    state
-    |> do_process()
 
     Agrex.Life.System.live(state.life.id)
     state
@@ -101,26 +106,27 @@ defmodule Agrex.Life.Worker do
     |> do_process_health()
   end
 
-  defp do_process_health(state) do
-    if state.vitals.health <= 0 do
-      Agrex.Life.System.die(state.life.id)
-    end
-
+  defp do_process_health(state)
+       when state.vitals.health <= 0 do
+    Agrex.Life.System.die(state.life.id)
     state
   end
 
-  defp do_process_status(state) do
-    if state.status == :unknown do
-      state.put_in(:status, :born)
+  defp do_process_health(state),
+    do: state
 
-      Agrex.Life.Emitter.emit_born(
-        state.life.id,
-        Agrex.Life.BornFact.new(state.edge_id, state.life)
-      )
-    end
-
+  defp do_process_status(state)
+       when state.status == :unknown do
+    state = put_in(state.status, :alive)
+    Agrex.Life.Emitter.emit_born(
+      state.life.id,
+      Agrex.Life.BornFact.new(state.edge_id, state.life)
+    )
     state
   end
+
+  defp do_process_status(state),
+    do: state
 
   defp do_die(state) do
     Logger.debug("\n [#{state.life.name}] has died")

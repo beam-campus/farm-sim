@@ -23,7 +23,7 @@ defmodule Agrex.Edge.Application do
       # Start Finch
       {Finch, name: Agrex.Finch},
       {Agrex.Countries.Cache, name: Agrex.Countries},
-      {Agrex.Life.Client, @default_edge_id},
+      {Agrex.Edge.Client, @default_edge_id},
       # Start Landscape System
       # {Agrex.Landscape.System, @default_landscape_params},
       # {Agrex.Herd.System, Agrex.Herd.Params.random()},

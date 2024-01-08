@@ -1,14 +1,13 @@
-defmodule AgrexWeb.FarmChannel do
+defmodule AgrexWeb.My.Channel do
   use AgrexWeb, :channel
 
+  @moduledoc """
+  The MyChannel is used to broadcast messages to all clients
+  """
 
   @impl true
-  def join("farm:lobby", payload, socket) do
-    if authorized?(payload) do
+  def join("my_channel:lobby", _payload, socket) do
       {:ok, socket}
-    else
-      {:error, %{reason: "unauthorized"}}
-    end
   end
 
   # Channels can be used in a request/response fashion
@@ -19,16 +18,11 @@ defmodule AgrexWeb.FarmChannel do
   end
 
   # It is also common to receive messages from the client and
-  # broadcast to everyone in the current topic (farm:lobby).
+  # broadcast to everyone in the current topic (my_channel:lobby).
   @impl true
   def handle_in("shout", payload, socket) do
     broadcast(socket, "shout", payload)
     {:noreply, socket}
-  end
-
-  # Add authorization logic here as required.
-  defp authorized?(_payload) do
-    true
   end
 
 

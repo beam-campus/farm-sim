@@ -5,8 +5,17 @@ defmodule AgrexWeb.LifeChannel do
   The LifeChannel is used to broadcast messages to all clients
   """
 
+  require Logger
+
   @impl true
   def join("life:lobby", _payload, socket) do
+    Logger.debug("LifeChannel.join: #{inspect(socket)}")
+    {:ok, socket}
+  end
+
+  @impl true
+  def handle_in("join", payload, socket) do
+    Logger.debug("LifeChannel.handle_in: #{inspect(payload)}")
     {:ok, socket}
   end
 
