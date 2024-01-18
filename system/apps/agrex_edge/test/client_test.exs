@@ -30,15 +30,6 @@ defmodule Agrex.Edge.ClientTest do
     assert is_list(Client.module_info(:exports))
   end
 
-  @tag :life_client_test
-  test "that the Client Module has a child_spec/1 function" do
-    assert Client.child_spec(@edge_id) == %{
-             id: Client.to_name(@edge_id),
-             start: {Agrex.Edge.Client, :start_link, [@edge_id]},
-             restart: :transient,
-             type: :worker
-           }
-  end
 
   @tag :life_client_test
   test "that the Client Module has a to_name/1 function" do

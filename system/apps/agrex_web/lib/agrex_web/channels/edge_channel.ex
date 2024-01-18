@@ -8,7 +8,7 @@ defmodule AgrexWeb.EdgeChannel do
   @fact_born "fact:born"
   @fact_died "fact:died"
   @hope_shout "hope:shout"
-  @hope_ping "hope:ping"
+  @hope_ping "ping"
   @hope_join_edge "join_edge"
 
   require Logger
@@ -20,10 +20,20 @@ defmodule AgrexWeb.EdgeChannel do
     {:ok, socket}
   end
 
+
+  @impl true
+  def handle_in("hello", payload, socket) do
+    Logger.debug("in: 'hello' #{inspect(payload)}")
+    {:reply, {:ok, payload}, socket}
+  end
+
+
+
    # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
   @impl true
   def handle_in(@hope_ping, payload, socket) do
+    Logger.debug("EdgeChannel.handle_in: #{@hope_ping} #{inspect(payload)}")
     {:reply, {:ok, payload}, socket}
   end
 
