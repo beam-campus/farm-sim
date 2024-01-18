@@ -174,5 +174,4 @@ defmodule Agrex.Edge.Client do
         name: via(edge_id)
       )
 
-
 end

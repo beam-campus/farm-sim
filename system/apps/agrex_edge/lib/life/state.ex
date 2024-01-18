@@ -21,11 +21,11 @@ defmodule Agrex.Life.State do
       default: :unknown
   end
 
-  def random(edge_id, %{x: x, y: y, z: z} = _vector) do
+  def random(edge_id, %{x: x, y: y, z: z} = _vector, life) do
     %Agrex.Life.State{
       edge_id: edge_id,
       field_id: Id.new("field", to_string(z)) |> Id.as_string(),
-      life: Agrex.Schema.Life.random(),
+      life: life,
       pos: Agrex.Schema.Position.random(x, y),
       vitals: Agrex.Schema.Vitals.random(),
       ticks: 0
