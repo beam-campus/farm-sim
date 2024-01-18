@@ -23,7 +23,7 @@ defmodule AgrexWeb.EdgeChannel do
     # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
   @impl true
-  def handle_in(@hope_shout, payload, socket) do
+  def handle_in(@hope_ping, payload, socket) do
     {:reply, {:ok, payload}, socket}
   end
 

@@ -4,6 +4,7 @@ defmodule Agrex.Edge.ClientTest do
   @moduledoc """
   Tests for Agrex.Edge.Client
   """
+  require Logger
   doctest Agrex.Edge.Client
 
   @edge_id "edge-1"
@@ -15,7 +16,7 @@ defmodule Agrex.Edge.ClientTest do
     state = Agrex.Life.State.random(@edge_id, @default_vector)
     res = Client.start_link(state)
     Logger.info("Agrex.Edge.Client.start_link/1: #{inspect(res)}")
-    res
+    :ok
   end
 
   @tag :life_client_test
@@ -25,13 +26,16 @@ defmodule Agrex.Edge.ClientTest do
 
   @tag :life_client_test
   test "that the Client Module has a child_spec/1 function" do
-    assert Client.child_spec(@farm_id) == %{
-      id: Client.via(@farm_id),
-      start: {Agrex.Edge.Client, :start_link, [@farm_id]},
-      restart: :temporary,
+    assert Client.child_spec(@edge_id) == %{
+      id: Client.to_name(@edge_id),
+      start: {Agrex.Edge.Client, :start_link, [@edge_id]},
+      restart: :transient,
       type: :worker
     }
   end
+
+
+
 
 
 

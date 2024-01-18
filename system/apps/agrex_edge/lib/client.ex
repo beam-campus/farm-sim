@@ -8,32 +8,13 @@ defmodule Agrex.Edge.Client do
   It is part of the main application supervision tree.
   """
 
-  ############ PLUMBING ################
-  def child_spec(edge_id),
-    do: %{
-      id: to_name(edge_id),
-      start: {__MODULE__, :start_link, [edge_id]},
-      restart: :transient,
-      type: :worker
-    }
-
-  def start_link(edge_id) do
-    res =
-      Slipstream.start_link(
-        __MODULE__,
-        edge_id,
-        name: via(edge_id)
-      )
-
-    Logger.info("Agrex.Edge.Client.start_link/1: #{inspect(res)}")
-  end
 
   ############# API ################
-  def await_register(edge_id),
+  def await_join_edge(edge_id),
     do:
       GenServer.call(
         via(edge_id),
-        {:join, edge_id}
+        {:join_edge, edge_id}
       )
 
   def emit_born(edge_id, fact) do
@@ -111,15 +92,15 @@ defmodule Agrex.Edge.Client do
     # {:noreply, socket}
   end
 
-  @impl Slipstream
-  def handle_cast({:join, edge_id}, socket) do
-    Logger.debug("Edge.Client #{inspect(socket)}")
-    res = Slipstream.await_join(socket, "life:lobby:#{edge_id}")
-    Logger.debug("Edge.Client await_join #{inspect(res)}")
-    {:noreply, socket}
-    # Logger.debug("Edge.Client #{socket.assigns.edge_id} emitting born fact: #{inspect(fact)}")
-    # {:noreply, socket}
-  end
+  # @impl Slipstream
+  # def handle_cast({:join_edge, edge_id}, socket) do
+  #   Logger.debug("Edge.Client #{inspect(socket)}")
+  #   res = Slipstream.await_join(socket, "life:lobby:#{edge_id}")
+  #   Logger.debug("Edge.Client await_join #{inspect(res)}")
+  #   {:noreply, socket}
+  #   # Logger.debug("Edge.Client #{socket.assigns.edge_id} emitting born fact: #{inspect(fact)}")
+  #   # {:noreply, socket}
+  # end
 
   @impl Slipstream
   def handle_cast({:emit_died, edge_id, fact}, socket) do
@@ -134,7 +115,7 @@ defmodule Agrex.Edge.Client do
   end
 
   @impl Slipstream
-  def handle_call({:join, edge_id}, _from, socket) do
+  def handle_call({:join_edge, edge_id}, _from, socket) do
     Logger.debug("Edge.Client #{inspect(socket)}")
     res = await_join(socket, "life:lobby:#{edge_id}")
     Logger.debug("Edge.Client await_join #{inspect(res)}")
@@ -167,12 +148,31 @@ defmodule Agrex.Edge.Client do
 
   ############# INTERNALS ################
 
-  defp to_name(edge_id),
+  ############ PLUMBING ################
+  def to_name(edge_id),
     do: "edge.client:#{edge_id}"
 
-  defp to_topic(edge_id),
+  def to_topic(edge_id),
     do: "life:lobby:#{edge_id}"
 
-  defp via(edge_id),
+  def via(edge_id),
     do: Agrex.Registry.via_tuple({:client, to_name(edge_id)})
+
+  def child_spec(edge_id),
+    do: %{
+      id: to_name(edge_id),
+      start: {__MODULE__, :start_link, [edge_id]},
+      restart: :transient,
+      type: :worker
+    }
+
+  def start_link(edge_id),
+    do:
+      Slipstream.start_link(
+        __MODULE__,
+        edge_id,
+        name: via(edge_id)
+      )
+
+
 end
