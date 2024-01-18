@@ -2,29 +2,35 @@ defmodule AgrexWeb.EdgeChannel do
   use AgrexWeb, :channel
 
   @moduledoc """
-  The FarmChannel is used to broadcast messages to all clients
+  The EdgeChannel is used to broadcast messages to all clients
   """
 
   @fact_born "fact:born"
   @fact_died "fact:died"
   @hope_shout "hope:shout"
   @hope_ping "hope:ping"
+  @hope_join_edge "join_edge"
 
   require Logger
 
-
   ################ CALLBACKS ################
   @impl true
-  def join("edge:lobby", _payload, socket) do
-    Logger.debug("EdgeChannel.join: #{inspect(socket)}")
+  def join("edge:lobby", payload, socket) do
+    Logger.debug("EdgeChannel.join:\n\n socket: #{inspect(socket)} \n\n payload: #{inspect(payload)}")
     {:ok, socket}
   end
 
-    # Channels can be used in a request/response fashion
+   # Channels can be used in a request/response fashion
   # by sending replies to requests from the client
   @impl true
   def handle_in(@hope_ping, payload, socket) do
     {:reply, {:ok, payload}, socket}
+  end
+
+  @impl true
+  def handle_in(@hope_join_edge, payload, socket) do
+    broadcast(socket, @hope_shout, payload)
+    {:noreply, socket}
   end
 
 
@@ -57,5 +63,6 @@ defmodule AgrexWeb.EdgeChannel do
 
   ################ INTERNALS ################
   defp to_topic(edge_id),
-    do: "life:lobby:#{edge_id}"
+    do: "edge:lobby:#{edge_id}"
+
 end

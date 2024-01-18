@@ -39,4 +39,37 @@ defmodule Agrex.Edge.ClientTest do
              type: :worker
            }
   end
+
+  @tag :life_client_test
+  test "that the Client Module has a to_name/1 function" do
+    assert Client.to_name(@edge_id) == "edge.client:#{@edge_id}"
+  end
+
+  @tag :life_client_test
+  test "that the Client Module has a to_topic/1 function" do
+    assert Client.to_topic(@edge_id) == "edge:lobby:#{@edge_id}"
+  end
+
+  @tag :life_client_test
+  test "that the Client Module has a via/1 function" do
+    assert Client.via(@edge_id) == {
+             :via,
+             Registry,
+             {Agrex.Registry, {:client, "edge.client:#{@edge_id}"}}
+           }
+  end
+
+
+  @tag :life_client_test
+  test "that the Client Module has a start_link/1 function" do
+    case Client.start_link(@edge_id) do
+      {:ok, pid} ->
+        assert is_pid(pid)
+
+      {:error, reason} ->
+        assert false
+    end
+  end
+
+
 end
