@@ -17,6 +17,10 @@ config :agrex_edge, Agrex.Edge.Client,
   uri: "ws://localhost:4000/edge_socket/websocket",
   reconnect_after_msec: [200, 500, 1_000, 2_000]
 
+# Configure the basic settings of the application
+config :agrex_core, 
+  edge_id: "edge_1"
+
 
 # Configure Mix tasks and generators
 config :agrex,

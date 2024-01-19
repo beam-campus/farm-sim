@@ -5,7 +5,10 @@ defmodule Agrex.Edge.Application do
 
   @moduledoc false
 
-  @default_edge_id "edge_1"
+  @default_edge_id Agrex.Core.constants()[:edge_id]
+
+  def edge_id,
+  do: @default_edge_id
 
   @default_landscape_params [
     name: "farm_scape",

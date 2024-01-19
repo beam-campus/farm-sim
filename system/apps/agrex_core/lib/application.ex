@@ -5,7 +5,6 @@ defmodule Agrex.Core.Application do
 
   @moduledoc false
 
-
   @impl Application
   def start(_type, _args) do
     children = [
