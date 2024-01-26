@@ -4,6 +4,9 @@
 defmodule Cronlike do
   use GenServer
 
+  @moduledoc """
+  Cronlike is the module that contains the cronlike functionality
+  """
   @allowed_units [:second, :minute, :hour, :day]
 
   def start_link(state) do

@@ -1,9 +1,12 @@
 defmodule Agrex.Limits do
   require Config
 
-  @max_age 5
-  @ticks_per_year 20
+  @moduledoc """
+  Agrex.Limits is the module that contains the limits for the Life Subsystem
+  """
 
+  @max_age 5
+  
   @defaults [
     ticks_per_year: 20
   ]
@@ -18,7 +21,7 @@ defmodule Agrex.Limits do
   def min_age, do: 1
   def min_weight, do: 50
   def max_weight, do: 750
-  def ticks_per_year, do: @ticks_per_year
+  def ticks_per_year, do: @defaults[:ticks_per_year]
 
   def random_age do
     ma = :rand.uniform(min_age())
@@ -40,6 +43,7 @@ defmodule Agrex.Limits do
   def random_nbr_lives do
     ml = :rand.uniform(min_lives())
     res = abs(:rand.uniform(max_lives()) - ml)
+
     case res do
       0 -> ml
       _ -> res

@@ -39,7 +39,7 @@ defmodule Agrex.Schema.Meta do
       do: %__MODULE__{
         id:
           Id.new(topic)
-          |> Id.to_string(),
+          |> Id.as_string(),
         topic: topic,
         agg_id: agg_id,
         correlation_id: correlation_id,

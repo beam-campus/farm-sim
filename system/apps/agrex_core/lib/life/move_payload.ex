@@ -9,7 +9,7 @@ defmodule Agrex.Life.Move.PayloadV1 do
   @primary_key false
   embedded_schema do
     field(:life_id, :string)
-    field(:vector, Vector)
+    embeds_one(:vector, Vector)
     field(:delta_t, :integer)
   end
 

@@ -6,7 +6,8 @@
 	],
 	"settings": {
 		"cSpell.words": [
-			"Cronlike"
+			"Cronlike",
+			"noreply"
 		],
 		"obsSwitcher.address": "localhost:4455",
 		"obsSwitcher.autoConnect": true,

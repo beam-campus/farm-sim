@@ -45,4 +45,5 @@ defmodule Agrex.System.MixProject do
       setup: ["cmd mix setup"]
     ]
   end
+  
 end

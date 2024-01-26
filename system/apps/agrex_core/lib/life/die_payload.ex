@@ -1,8 +1,6 @@
 defmodule Agrex.Life.Die.PayloadV1 do
   use Ecto.Schema
 
-  alias Agrex.Schema.Vector
-
   @moduledoc """
   the payload for the edge:attached:v1 fact
   """
@@ -10,6 +8,7 @@ defmodule Agrex.Life.Die.PayloadV1 do
   embedded_schema do
     field(:life_id, :string)
     field(:age, :integer)
+
     field(:cause, Ecto.Enum,
       values: [
         :unknown,

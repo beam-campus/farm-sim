@@ -10,15 +10,18 @@ defmodule Agrex.Life.State do
 
   @primary_key false
   embedded_schema do
-    field :edge_id, :string
-    field :field_id, :string
-    embeds_one :life, Agrex.Schema.Life
-    embeds_one :pos, Agrex.Schema.Vector
-    embeds_one :vitals, Agrex.Schema.Vitals
-    field :ticks, :integer
-    field :status, Ecto.Enum,
+    field(:edge_id, :string)
+    field(:field_id, :string)
+    field(:ticks, :integer)
+
+    field(:status, Ecto.Enum,
       values: [:unknown, :born, :alive, :dead],
       default: :unknown
+    )
+
+    embeds_one(:life, Agrex.Schema.Life)
+    embeds_one(:pos, Agrex.Schema.Vector)
+    embeds_one(:vitals, Agrex.Schema.Vitals)
   end
 
   def random(edge_id, %{x: x, y: y, z: z} = _vector, life) do
@@ -34,10 +37,9 @@ defmodule Agrex.Life.State do
 
   defimpl String.Chars, for: __MODULE__ do
     def to_string(s) do
-      "\n\n [#{__MODULE__}]"
+      "\n\n [#{__MODULE__}]\n" <>
       "#{s.life}" <>
-      "#{s.vitals}"
+        "#{s.vitals}\n\n"
     end
   end
-
 end
