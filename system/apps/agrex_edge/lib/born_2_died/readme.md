@@ -1,10 +1,10 @@
-# Agrex.Life Subsystem
+# Agrex.Born2Died Subsystem
 
-The Agrex.Life subsystem is responsible for controlling and simulating the life of farm animal.
+The Agrex.Born2Died subsystem is responsible for controlling and simulating the life of farm animal.
 
-## Outline 
+## Outline
 
-- [Agrex.Life Subsystem](#agrexlife-subsystem)
+- [Agrex.Born2Died Subsystem](#agrexborn2died-subsystem)
   - [Outline](#outline)
   - [Actor diagram](#actor-diagram)
   - [Sequence diagram](#sequence-diagram)
@@ -14,10 +14,10 @@ The Agrex.Life subsystem is responsible for controlling and simulating the life 
 ```mermaid
 graph TD
 
-  System[Agrex.Life.System]
-  Supervisor[Agrex.Life.System.Supervisor]
-  Worker[Agrex.Life.Worker]
-  Channel[Agrex.Life.Channel]
+  System[Agrex.Born2Died.System]
+  Supervisor[Agrex.Born2Died.System.Supervisor]
+  Worker[Agrex.Born2Died.Worker]
+  Channel[Agrex.Born2Died.Channel]
 
   System --> |start_link| Supervisor  
   Supervisor --> |start_child| Worker

@@ -1,4 +1,4 @@
-defmodule Agrex.Life.MatePayloadV1 do
+defmodule Agrex.Born2Died.MatePayloadV1 do
   use Ecto.Schema
 
 

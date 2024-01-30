@@ -1,14 +1,12 @@
-defmodule Agrex.Life.Worker do
-  use GenServer
-
+defmodule Agrex.Born2Died.Worker do
   @moduledoc """
-  Agrex.Life.Worker is the worker process that is spawned for each Life.
+  Agrex.Born2Died.Worker is the worker process that is spawned for each Life.
   """
-
+  use GenServer
   require Logger
   import LogHelper
 
-  alias Agrex.Life.Rules
+  alias Agrex.Born2Died.Rules
 
   ################ INTERFACE ###############
   def live(life_id),
@@ -27,29 +25,6 @@ defmodule Agrex.Life.Worker do
 
   def get_state(life_id),
     do: GenServer.call(via(life_id), {:get_state})
-
-  def via(life_id),
-    do: Agrex.Registry.via_tuple(to_name(life_id))
-
-  def child_spec(life_params) do
-    %{
-      id: __MODULE__,
-      start: {__MODULE__, :start_link, [life_params]},
-      type: :worker,
-      restart: :transient
-    }
-  end
-
-  def start_link(state) do
-    res =
-      GenServer.start_link(
-        __MODULE__,
-        state,
-        name: via(state.life.id)
-      )
-
-    log_res(res)
-  end
 
   ################# CALLBACKS #####################
   @impl GenServer
@@ -96,7 +71,7 @@ defmodule Agrex.Life.Worker do
       "[#{state.life.name}] status: [#{to_string(state.status)}] at age #{state.vitals.age}."
     )
 
-    Agrex.Life.System.live(state.life.id)
+    Agrex.Born2Died.System.live(state.life.id)
     state
   end
 
@@ -108,7 +83,7 @@ defmodule Agrex.Life.Worker do
 
   defp do_process_health(state)
        when state.vitals.health <= 0 do
-    Agrex.Life.System.die(state.life.id)
+    Agrex.Born2Died.System.die(state.life.id)
     state
   end
 
@@ -118,10 +93,12 @@ defmodule Agrex.Life.Worker do
   defp do_process_status(state)
        when state.status == :unknown do
     state = put_in(state.status, :alive)
-    Agrex.Life.Emitter.emit_born(
+
+    Agrex.Born2Died.Emitter.emit_born(
       state.life.id,
-      Agrex.Life.BornFact.new(state.edge_id, state.life)
+      Agrex.Born2Died.BornFact.new(state.edge_id, state.life)
     )
+
     state
   end
 
@@ -130,7 +107,31 @@ defmodule Agrex.Life.Worker do
 
   defp do_die(state) do
     Logger.debug("\n [#{state.life.name}] has died")
-    Agrex.Life.System.stop(state.life.id)
+    Agrex.Born2Died.System.stop(state.life.id)
     state
+  end
+
+  ################# PLUMBING #####################
+  def via(life_id),
+    do: Agrex.Registry.via_tuple(to_name(life_id))
+
+  def child_spec(life_params) do
+    %{
+      id: __MODULE__,
+      start: {__MODULE__, :start_link, [life_params]},
+      type: :worker,
+      restart: :transient
+    }
+  end
+
+  def start_link(state) do
+    res =
+      GenServer.start_link(
+        __MODULE__,
+        state,
+        name: via(state.life.id)
+      )
+
+    log_res(res)
   end
 end

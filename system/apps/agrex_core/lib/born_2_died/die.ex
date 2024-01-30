@@ -1,4 +1,4 @@
-defmodule Agrex.Life.Die.PayloadV1 do
+defmodule Agrex.Born2Died.Die.PayloadV1 do
   use Ecto.Schema
 
   @moduledoc """

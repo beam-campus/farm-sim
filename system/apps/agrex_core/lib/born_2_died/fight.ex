@@ -1,4 +1,4 @@
-defmodule Agrex.Life.Infect.PayloadV1 do
+defmodule Agrex.Born2Died.Fight.PayloadV1 do
   use Ecto.Schema
 
   @moduledoc """
@@ -7,12 +7,14 @@ defmodule Agrex.Life.Infect.PayloadV1 do
   @primary_key false
   embedded_schema do
     field(:life_id, :string)
-    field(:rate, :integer)
+    field(:adversary_id, :string)
+    field(:power, :integer)
   end
 
-  def new(life_id, rate),
+  def new(life_id, adversary_id, power),
     do: %__MODULE__{
       life_id: life_id,
-      rate: rate
+      adversary_id: adversary_id,
+      power: power
     }
 end

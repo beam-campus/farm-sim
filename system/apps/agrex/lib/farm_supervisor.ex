@@ -3,8 +3,8 @@ defmodule Agrex.FarmSupervisor do
 
   alias Agrex.Schema.Life
   alias Agrex.RobotsSupervisor
-  # alias Agrex.Life.Worker
-  
+  # alias Agrex.Born2Died.Worker
+
 
   def start_link(sup, [farm: farm] = _opts) do
     IO.puts("FarmSupervisor -> This was received via start_link")

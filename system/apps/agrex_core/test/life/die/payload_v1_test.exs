@@ -1,9 +1,9 @@
-defmodule Agrex.Life.Die.PayloadV1Test do
+defmodule Agrex.Born2Died.Die.PayloadV1Test do
   use ExUnit.Case
 
-  doctest Agrex.Life.Die.PayloadV1
+  doctest Agrex.Born2Died.Die.PayloadV1
 
-  alias Agrex.Life.Die.PayloadV1
+  alias Agrex.Born2Died.Die.PayloadV1
 
   @tag :life_die_test
   test "new/2" do

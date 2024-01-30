@@ -8,17 +8,21 @@ defmodule Agrex.Edge.Application do
   @default_edge_id Agrex.Core.constants()[:edge_id]
 
   def edge_id,
-  do: @default_edge_id
+    do: @default_edge_id
 
-  @default_landscape_params [
-    name: "farm_scape",
-    nbr_of_regions: Agrex.Limits.max_regions(),
-    min_area: 30_000,
-    min_people: 10_000_000
-  ]
+   @default_map %Agrex.Schema.Vector{
+    x: 1_000,
+    y: 1_000,
+    z: 1
+   }
 
-  # The field is 1_000 x 1_000 meters and labeled 1
-  @default_vector Agrex.Schema.Vector.new(1_000, 1_000, 1)
+  # @default_landscape_params [
+  #   name: "farm_scape",
+  #   nbr_of_regions: Agrex.Limits.max_regions(),
+  #   min_area: 30_000,
+  #   min_people: 10_000_000
+  # ]
+
 
   @impl Application
   def start(_type, _args) do
@@ -29,9 +33,10 @@ defmodule Agrex.Edge.Application do
       {Agrex.Edge.Client, @default_edge_id},
       # Start Landscape System
       # {Agrex.Landscape.System, @default_landscape_params},
-      # {Agrex.Herd.System, Agrex.Herd.Params.random()},
-      # {Agrex.Life.System, Agrex.Life.State.random(@default_edge_id, @default_vector)}
+       {Agrex.MngHerd.System, Agrex.MngHerd.State.random(@default_edge_id, @default_map)}
+      # {Agrex.Born2Died.System, Agrex.Born2Died.State.random(@default_edge_id, @default_map)}
     ]
+
     Supervisor.start_link(children,
       strategy: :one_for_one,
       name: __MODULE__

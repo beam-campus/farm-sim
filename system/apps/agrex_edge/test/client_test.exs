@@ -14,7 +14,7 @@ defmodule Agrex.Edge.ClientTest do
 
   setup_all do
     state =
-      Agrex.Life.State.random(
+      Agrex.Born2Died.State.random(
         @edge_id,
         @default_vector,
         Agrex.Schema.Life.random()

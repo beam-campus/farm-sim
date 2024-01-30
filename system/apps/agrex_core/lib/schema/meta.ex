@@ -1,10 +1,12 @@
 defmodule Agrex.Schema.Meta do
-  use Ecto.Schema
-
   @moduledoc """
   Agrex.Schema.Meta is the module that contains the facts for the Life Subsystem
   """
+  use Ecto.Schema
   alias Agrex.Schema.Id
+
+  defguard is_meta(meta)
+           when is_struct(meta, __MODULE__)
 
   @primary_key false
   embedded_schema do
@@ -18,16 +20,24 @@ defmodule Agrex.Schema.Meta do
     field(:timestamp, :utc_datetime)
   end
 
+  def new(
+        topic,
+        agg_id,
+        order
+      ),
+      do: %__MODULE__{
+        id:
+          Id.new(topic)
+          |> Id.as_string(),
+        topic: topic,
+        agg_id: agg_id,
+        correlation_id: UUID.uuid4(:default),
+        causation_id: UUID.uuid4(:default),
+        causation_type: 0,
+        order: order,
+        timestamp: DateTime.utc_now()
+      }
 
-
-  @spec new(
-          topic :: String.t(),
-          agg_id :: String.t(),
-          order :: Integer.t(),
-          correlation_id :: String.t(),
-          causation_id :: String.t(),
-          causation_type :: Integer.t()
-        ) :: %__MODULE__{}
   def new(
         topic,
         agg_id,

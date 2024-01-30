@@ -1,7 +1,5 @@
-defmodule Agrex.Life.Move.PayloadV1 do
+defmodule Agrex.Born2Died.Infect.PayloadV1 do
   use Ecto.Schema
-
-  alias Agrex.Schema.Vector
 
   @moduledoc """
   the payload for the edge:attached:v1 fact
@@ -9,14 +7,12 @@ defmodule Agrex.Life.Move.PayloadV1 do
   @primary_key false
   embedded_schema do
     field(:life_id, :string)
-    embeds_one(:vector, Vector)
-    field(:delta_t, :integer)
+    field(:rate, :integer)
   end
 
-  def new(life_id, vector, delta_t),
+  def new(life_id, rate),
     do: %__MODULE__{
       life_id: life_id,
-      vector: vector,
-      delta_t: delta_t
+      rate: rate
     }
 end

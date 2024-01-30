@@ -1,11 +1,11 @@
 defmodule Agrex.Schema.Fact do
-  use Ecto.Schema
-
   @moduledoc """
   Agrex.Schema.Fact is a data structure that represents Facts (Events) in the Agrex system.
   """
-
+  use Ecto.Schema
   alias Agrex.Schema.Meta
+
+  defguard is_fact(fact) when is_struct(fact, __MODULE__)
 
   @primary_key false
   embedded_schema do

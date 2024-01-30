@@ -1,8 +1,11 @@
 defmodule Agrex.Region.System do
+  @moduledoc """
+  Agrex.Region.System is a data structure that represents a Region in the Agrex system.
+  """
   use GenServer
 
   require Logger
-  import LogHelper
+
 
   # INTERFACES
 

@@ -1,4 +1,4 @@
-defmodule AgrexEdge.MixProject do
+defmodule Agrex.Edge.MixProject do
   use Mix.Project
 
   def project do
@@ -35,6 +35,7 @@ defmodule AgrexEdge.MixProject do
   defp deps do
     [
       {:slipstream, "~>1.1.0"},
+      {:commanded, "~> 1.4"},
       {:agrex_core, in_umbrella: true}
     ]
   end

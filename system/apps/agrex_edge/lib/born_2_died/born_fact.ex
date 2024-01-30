@@ -1,4 +1,4 @@
-defmodule Agrex.Life.BornFact do
+defmodule Agrex.Born2Died.BornFact do
   use Ecto.Schema
 
   alias Agrex.Schema.Life

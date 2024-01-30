@@ -2,6 +2,12 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../../rgfaber/elixir-phoenix-study"
+		},
+		{
+			"path": "../../rgfaber/elixir-in-action"
 		}
 	],
 	"settings": {

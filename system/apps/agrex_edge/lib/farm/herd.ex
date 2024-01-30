@@ -51,7 +51,7 @@ defmodule Agrex.Farm.Herd do
     case res =
            DynamicSupervisor.start_child(
              __MODULE__,
-             Agrex.Farm.Herd.Life.Worker.child_spec(life)
+             Agrex.Born2Died.Worker.child_spec(life)
            ) do
       {:ok, pid} ->
         pid

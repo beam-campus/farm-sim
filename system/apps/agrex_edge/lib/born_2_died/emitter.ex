@@ -1,4 +1,4 @@
-defmodule Agrex.Life.Emitter do
+defmodule Agrex.Born2Died.Emitter do
   use GenServer
 
   @moduledoc """
@@ -71,36 +71,6 @@ defmodule Agrex.Life.Emitter do
   @impl GenServer
   def init(state),
     do: {:ok, state}
-
-  @impl GenServer
-  def handle_cast({:emit_born, fact}, state) do
-    Agrex.Edge.Client.emit_born(state.edge_id, fact)
-    {:noreply, state}
-  end
-
-  @impl GenServer
-  def handle_cast({:emit_died, fact}, state) do
-    Agrex.Edge.Client.emit_died(state.edge_id, fact)
-    {:noreply, state}
-  end
-
-  @impl GenServer
-  def handle_call({:emit_born, fact}, _from, state) do
-    res = Agrex.Edge.Client.await_emit_born(state.edge_id, fact)
-    {:reply, res, state}
-  end
-
-  @impl GenServer
-  def handle_call({:emit_died, fact}, _from, state) do
-    res = Agrex.Edge.Client.await_emit_died(state.edge_id, fact)
-    {:reply, res, state}
-  end
-
-  @impl GenServer
-  def handle_call({:join, edge_id}, _from, state) do
-    res = Agrex.Edge.Client.await_join(edge_id)
-    {:reply, res, state}
-  end
 
   ############ INTERNALS ###########
   defp to_name(life_id),

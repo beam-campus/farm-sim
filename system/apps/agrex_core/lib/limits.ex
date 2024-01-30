@@ -6,15 +6,15 @@ defmodule Agrex.Limits do
   """
 
   @max_age 5
-  
+
   @defaults [
     ticks_per_year: 20
   ]
 
   def max_regions, do: 3
   def max_farms, do: 2
-  def max_lives, do: 100_000
-  def min_lives, do: 20_000
+  def max_lives, do: 10
+  def min_lives, do: 2
   def max_robots, do: 3
   def min_robots, do: 2
   def max_age, do: @max_age

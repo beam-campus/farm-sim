@@ -1,12 +1,12 @@
-defmodule Agrex.Life.EmitterTest do
+defmodule Agrex.Born2Died.EmitterTest do
   use ExUnit.Case
 
   @moduledoc """
-  These are the tests for Agrex.Life.Emitter
+  These are the tests for Agrex.Born2Died.Emitter
  """
 
   require Logger
-  alias Agrex.Life.Emitter
+  alias Agrex.Born2Died.Emitter
 
   @edge_id "edge-1"
 
@@ -17,8 +17,8 @@ defmodule Agrex.Life.EmitterTest do
   end
 
   @tag :ignore_test
-  test "that the Agrex.Life.Emitter module exists" do
-    assert is_list(Agrex.Life.Emitter.module_info())
+  test "that the Agrex.Born2Died.Emitter module exists" do
+    assert is_list(Agrex.Born2Died.Emitter.module_info())
   end
 
   test "emit_born/2 emits the 'emit_born' fact" do
@@ -66,7 +66,7 @@ defmodule Agrex.Life.EmitterTest do
     # Assert
     assert result == %{
              id: {:emitter, "life-123"},
-             start: {Agrex.Life.Emitter, :start_link, [state]},
+             start: {Agrex.Born2Died.Emitter, :start_link, [state]},
              type: :worker,
              restart: :transient
            }

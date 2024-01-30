@@ -1,4 +1,4 @@
-defmodule Agrex.Life.System do
+defmodule Agrex.Born2Died.System do
   use GenServer
 
   require Logger
@@ -8,6 +8,7 @@ defmodule Agrex.Life.System do
   The Life System is a GenServer that manages the
   Life Worker and Life Channel
   """
+  
   ############# PLUMBING ##################
   def via(life_id),
     do: Agrex.Registry.via_tuple({:worker, to_name(life_id)})
@@ -25,6 +26,7 @@ defmodule Agrex.Life.System do
   end
 
   def start_link(state) do
+    Logger.debug("in:state = #{inspect(state)}")
     res =
       GenServer.start_link(
         __MODULE__,
@@ -58,12 +60,12 @@ defmodule Agrex.Life.System do
 
   @impl GenServer
   def handle_cast({:live, life_id}, state) do
-    Agrex.Life.Worker.live(life_id)
+    Agrex.Born2Died.Worker.live(life_id)
     {:noreply, state}
   end
 
   def handle_cast({:die, life_id}, state) do
-    Agrex.Life.Worker.die(life_id)
+    Agrex.Born2Died.Worker.die(life_id)
     {:noreply, state}
   end
 
@@ -74,8 +76,9 @@ defmodule Agrex.Life.System do
   defp do_supervise(state) do
     Supervisor.start_link(
       [
-        {Agrex.Life.Emitter, state},
-        {Agrex.Life.Worker, state}
+        {Agrex.Born2Died.Aggregate, state},
+        {Agrex.Born2Died.Emitter, state},
+        {Agrex.Born2Died.Worker, state}
       ],
       name: via_sup(state.life.id),
       strategy: :one_for_one

@@ -1,4 +1,4 @@
-defmodule Agrex.Life.GiveMilk.PayloadV1 do
+defmodule Agrex.Born2Died.GiveMilk.PayloadV1 do
   use Ecto.Schema
 
 

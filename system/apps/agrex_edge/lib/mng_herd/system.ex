@@ -1,21 +1,38 @@
-defmodule Agrex.Herd.System do
+defmodule Agrex.MngHerd.System do
   use GenServer
 
   require Logger
 
   @moduledoc """
-  Agrex.Herd.System is the top-level supervisor for the Agrex.Herd subsystem.
+  Agrex.MngHerd.System is the top-level supervisor for the Agrex.MngHerd subsystem.
   """
 
   ############# API ################
+  def start_born2died(herd_id, born2died_state) do
+    GenServer.cast(
+      via(herd_id),
+      {:start_born2died, herd_id, born2died_state}
+    )
+  end
+
   def get_state(herd_id),
     do:
       GenServer.call(
-        via(to_name(herd_id)),
+        via(herd_id),
         {:get_state, herd_id}
       )
 
   ################ CALLBACKS #############
+  @impl GenServer
+  def handle_cast({:start_born2died, herd_id, born2died_state}, state) do
+    Supervisor.start_child(
+      via_sup(herd_id),
+      {Agrex.Born2Died.System, born2died_state}
+    )
+    {:noreply, state}
+  end
+
+
   @impl GenServer
   def init(state) do
     Logger.debug("in:state = #{inspect(state)}")
@@ -30,15 +47,17 @@ defmodule Agrex.Herd.System do
 
   ########## INTERNALS ############
   defp do_supervise(%{id: herd_id} = state) do
+    Logger.debug("in:state = #{inspect(state)}")
+
     children = [
-      {Agrex.Herd.Lives, herd_id},
-      {Agrex.Herd.Builder, state}
+      # {Agrex.MngHerd.Lives, herd_id},
+      {Agrex.MngHerd.Builder, state}
     ]
 
     res =
       Supervisor.start_link(
         children,
-        name: via(to_sup(herd_id)),
+        name: via_sup(herd_id),
         strategy: :one_for_one
       )
 
@@ -49,11 +68,13 @@ defmodule Agrex.Herd.System do
   def to_name(herd_id),
     do: "herd.system.#{herd_id}"
 
-  def to_sup(herd_id),
-    do: "herd.system.sup.#{herd_id}"
 
   def via(key) when is_bitstring(key),
-    do: Agrex.Registry.via_tuple(key)
+    do: Agrex.Registry.via_tuple({:system, to_name(key)})
+
+ def via_sup(key) when is_bitstring(key),
+    do: Agrex.Registry.via_tuple({:supervisor, to_name(key)})
+
 
   def child_spec(%{id: herd_id} = state) do
     %{
@@ -68,7 +89,7 @@ defmodule Agrex.Herd.System do
     GenServer.start_link(
       __MODULE__,
       state,
-      name: via(to_name(herd_id))
+      name: via(herd_id)
     )
   end
 end

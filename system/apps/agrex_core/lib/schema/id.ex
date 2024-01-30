@@ -10,11 +10,12 @@ defmodule Agrex.Schema.Id do
 
   @primary_key false
   embedded_schema do
-    field :prefix, :string
-    field :value, :string
+    field(:prefix, :string)
+    field(:value, :string)
   end
 
-  def as_string(%{prefix: p, value: v} = _id),  do: p <>"-"<> v
+  def as_string(%{prefix: p, value: v} = _id),
+    do: p <> "-" <> v
 
   def changeset(id, args) do
     id

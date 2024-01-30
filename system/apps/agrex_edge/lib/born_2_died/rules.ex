@@ -1,7 +1,7 @@
-defmodule Agrex.Life.Rules do
+defmodule Agrex.Born2Died.Rules do
 
   @moduledoc """
-  Agrex.Life.Rules is the module that contains the rules for the Life
+  Agrex.Born2Died.Rules is the module that contains the rules for the Life
   """
   @ticks_per_year 2
   @max_age 20

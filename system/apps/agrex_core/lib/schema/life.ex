@@ -7,7 +7,6 @@ defmodule Agrex.Schema.Life do
   for a ver
   """
   alias Agrex.Schema.{
-    Birth,
     Id,
     Life,
     LifeNames
@@ -26,7 +25,6 @@ defmodule Agrex.Schema.Life do
     field :birth_date, :date
     field :father_id, :string
     field :mother_id, :string
-    belongs_to :birth, Birth
   end
 
   @fields [
@@ -35,8 +33,7 @@ defmodule Agrex.Schema.Life do
     :gender,
     :birth_date,
     :father_id,
-    :mother_id,
-    :gestation
+    :mother_id
   ]
 
   def id_prefix, do: "life"
@@ -44,7 +41,7 @@ defmodule Agrex.Schema.Life do
   def changeset(life, attr) do
     life
     |> cast(attr, @fields)
-    |> validate_required([:life_number, :responder_id, :gender])
+    |> validate_required([:gender])
   end
 
   def new(%{} = attr) when is_map(attr) do
@@ -65,7 +62,7 @@ defmodule Agrex.Schema.Life do
 
   def new() do
     %Life{
-      id: Id.new(id_prefix())
+      id: random_life_id()
     }
   end
 

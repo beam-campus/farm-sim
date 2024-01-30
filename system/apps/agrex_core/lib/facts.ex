@@ -1,9 +1,9 @@
-defmodule Agrex.Life.Facts do
+defmodule Agrex.Born2Died.Facts do
 
   @moduledoc """
-  Agrex.Life.Facts is the module that contains the facts for the Life Subsystem
+  Agrex.Born2Died.Facts is the module that contains the facts for the Life Subsystem
   """
 
-  
+
 
 end
