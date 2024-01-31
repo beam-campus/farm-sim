@@ -4,26 +4,23 @@ defmodule Agrex.Born2Died.Aggregate do
   @moduledoc """
   Aggregate is a GenServer that holds the state of a Life.
   """
+  require Agrex.Born2Died.Hopes
+  require Agrex.Born2Died.Facts
+  alias Agrex.Born2Died.Hopes
+  alias Agrex.Born2Died.Facts
 
   ############## COMMAND HANDLERS ####
   def build_state(agg_id) do
     GenServer.call(via_tuple(agg_id), :build_state)
   end
 
-  def execute(
-        "agrex.born2died.initialize.v1",
-        %{meta: %{agg_id: agg_id}} = hope
-      ) do
-    GenServer.call(
-      via_tuple(agg_id),
-      {:initialize, hope}
-    )
-  end
+  def execute(Hopes.initialize_v1(), %{meta: %{agg_id: agg_id}} = hope),
+    do: GenServer.call(via_tuple(agg_id), {:initialize, hope})
 
   ############## MUTATORS ##########
   defp source_event(
          %{
-           topic: "agrex.born2died.born.v1",
+           topic: Facts.born_v1(),
            meta: _meta,
            payload: _payload
          } = _event,
@@ -35,21 +32,17 @@ defmodule Agrex.Born2Died.Aggregate do
 
   ################ CALLBACKS #######
   @impl GenServer
-  def handle_call(
-        :build_state,
-        _from,
-        %{state: old_state, events: events} = _state
-      ) do
+  def handle_call(:build_state, _from, %{state: old_state, events: events} = _state) do
     state =
       events
       |> Enum.reduce(old_state, &source_event(&1, &2))
+
     {:reply, [state: state, events: events], %{state: state, events: events}}
   end
 
   @impl GenServer
-  def handle_call(
+  def handle_cast(
         {:initialize, %{meta: meta, payload: payload} = _hope},
-        _from,
         %{status: status, events: events} = state
       ) do
     case Flags.has(status, 1) do
@@ -61,11 +54,12 @@ defmodule Agrex.Born2Died.Aggregate do
 
         new_state =
           state
-          |> Map.put(:events, [
-            events ++ Agrex.Schema.Fact.new("agrex.born2died.born.v1", meta, payload)
-          ])
+          |> Map.put(
+            :events,
+            [Agrex.Schema.Fact.new("agrex.born2died.born.v1", meta, payload)] ++ events
+          )
 
-        {:reply, new_state, new_state}
+        {:noreply, new_state}
     end
   end
 
@@ -88,8 +82,11 @@ defmodule Agrex.Born2Died.Aggregate do
   end
 
   def via_tuple(agg_id) do
-    Agrex.Registry.via_tuple({:aggregate, agg_id})
+    Agrex.Registry.via_tuple({:aggregate, to_name(agg_id)})
   end
+
+  def to_name(agg_id),
+    do: "born2died.aggregate.#{agg_id}"
 
   def child_spec(%{id: agg_id} = state) do
     %{

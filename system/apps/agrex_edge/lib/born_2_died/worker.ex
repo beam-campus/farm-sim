@@ -70,6 +70,7 @@ defmodule Agrex.Born2Died.Worker do
     Logger.debug(
       "[#{state.life.name}] status: [#{to_string(state.status)}] at age #{state.vitals.age}."
     )
+    Agrex.Born2Died.Aggregate.execute(state.life.id)
 
     Agrex.Born2Died.System.live(state.life.id)
     state
