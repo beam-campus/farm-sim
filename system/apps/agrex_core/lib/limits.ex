@@ -13,7 +13,7 @@ defmodule Agrex.Limits do
 
   def max_regions, do: 3
   def max_farms, do: 2
-  def max_lives, do: 10
+  def max_lives, do: 5
   def min_lives, do: 2
   def max_robots, do: 3
   def min_robots, do: 2
@@ -54,14 +54,16 @@ defmodule Agrex.Limits do
     :rand.uniform(100)
   end
 
-  def random_pos(max_x, max_y)
+  def random_pos(max_x, max_y, max_z \\ 1)
       when is_integer(max_x) and
              is_integer(max_y) and
+             is_integer(max_z) and
              max_x > 0 and
              max_y > 0 do
     %{
       x: :rand.uniform(max_x),
-      y: :rand.uniform(max_y)
+      y: :rand.uniform(max_y),
+      z: :rand.uniform(max_z)
     }
   end
 end

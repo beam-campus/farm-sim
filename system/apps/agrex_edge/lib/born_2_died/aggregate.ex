@@ -11,11 +11,11 @@ defmodule Agrex.Born2Died.Aggregate do
 
   ############## COMMAND HANDLERS ####
   def build_state(agg_id) do
-    GenServer.call(via_tuple(agg_id), :build_state)
+    GenServer.call(via(agg_id), :build_state)
   end
 
   def execute(Hopes.initialize_v1(), %{meta: %{agg_id: agg_id}} = hope),
-    do: GenServer.call(via_tuple(agg_id), {:initialize, hope})
+    do: GenServer.call(via(agg_id), {:initialize, hope})
 
   ############## MUTATORS ##########
   defp source_event(
@@ -73,24 +73,23 @@ defmodule Agrex.Born2Died.Aggregate do
   end
 
   ########## PLUMBING ##############
-  def start_link(%{id: agg_id} = state) do
+  def start_link(state) do
     GenServer.start_link(
       __MODULE__,
       state,
-      name: via_tuple(agg_id)
+      name: via(state.id)
     )
   end
 
-  def via_tuple(agg_id) do
-    Agrex.Registry.via_tuple({:aggregate, to_name(agg_id)})
-  end
+  def via(agg_id),
+    do: Agrex.Registry.via_tuple({:aggregate, to_name(agg_id)})
 
   def to_name(agg_id),
-    do: "born2died.aggregate.#{agg_id}"
+    do: "born_2_died.aggregate.#{agg_id}"
 
-  def child_spec(%{id: agg_id} = state) do
+  def child_spec(state) do
     %{
-      id: via_tuple(agg_id),
+      id: via(state.id),
       start: {__MODULE__, :start_link, [state]},
       type: :worker,
       restart: :transient

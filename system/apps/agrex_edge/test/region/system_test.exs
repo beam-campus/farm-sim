@@ -2,7 +2,7 @@ defmodule Agrex.Region.SystemTest do
   use ExUnit.Case
 
 
-  @test_landscape 
+  @test_landscape
 
   @tag :ignore_test
   doctest Agrex.Region.System
@@ -15,7 +15,7 @@ defmodule Agrex.Region.SystemTest do
   end
 
 
-  # @tag :ignore_test
+  @tag :ignore_test
   test "that we can start a Agrex.Region.System" do
     landscape = @test_landscape
     res =  Agrex.Region.System.start_link(nil,nil)

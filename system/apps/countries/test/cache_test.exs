@@ -1,7 +1,7 @@
-defmodule Agrex.Countries.CacheTest do
+defmodule Countries.CacheTest do
   use ExUnit.Case
 
-  alias Agrex.Countries.Cache
+  alias Countries.Cache
 
   @tag :ignore_test
   doctest Cache
@@ -20,6 +20,11 @@ defmodule Agrex.Countries.CacheTest do
   @tag :ignore_test
   test "that we can start the Countries Cache" do
     res = Agrex.Countries.Cache.start_link([])
+    assert res != nil
+  end
+
+  test "that we can get the regions" do
+    res = Cache.all_regions()
     assert res != nil
   end
 

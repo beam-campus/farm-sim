@@ -1,4 +1,4 @@
-defmodule Agrex.Farm.Channel do
+defmodule Agrex.MngFarm.Channel do
   use GenServer
 
   @moduledoc """

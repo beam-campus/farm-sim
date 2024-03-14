@@ -1,19 +1,22 @@
 defmodule Agrex.Landscape.SystemTest do
+  @moduledoc """
+  This module tests the Agrex.Landscape.System module.
+  """
   use ExUnit.Case
 
   require Logger
 
-  @test_landscape_params [
-    name: "farm_scape",
+  @test_landscape_params %{
+    id: "farm_scape",
     nbr_of_regions: 5,
     min_area: 30_000,
     min_people: 10_000_000
-  ]
+  }
 
-  @tag :ignore_test
+  @tag :test_landscape_system
   doctest Agrex.Landscape.System
 
-  describe "\n[~> Setup the Landscape.System test environment <~]" do
+  describe "\n[~> Setup the Landscape.System test environment <~]\n" do
     setup %{} do
       case res = Agrex.Countries.Cache.start_link([]) do
         {:ok, cache} ->
@@ -24,6 +27,8 @@ defmodule Agrex.Landscape.SystemTest do
       end
     end
 
+
+    @tag :test_landscape_system
     test "\n[== Test that we can start the Agrex.Landscape.System ==]" do
       res = Agrex.Landscape.System.start_link(@test_landscape_params)
 
@@ -38,20 +43,17 @@ defmodule Agrex.Landscape.SystemTest do
       Logger.debug("Agrex.Landscape.System.start_link/1 returned => #{inspect(res)}")
     end
 
-    @tag :ignore_test
+    @tag :test_landscape_system
     test "that the Agrex.Landscape.System module exists" do
       assert is_list(Agrex.Landscape.System.module_info())
     end
 
-    @tag :ignore_test
+    @tag :test_landscape_system
     test "that we can start the Landscape.System for a particular landscape" do
       res =
-        Agrex.Landscape.System.start_link(
-          [name: "my_landscape", nbr_of_regions: 5],
-          []
-        )
+        Agrex.Landscape.System.start_link(@test_landscape_params)
 
-      IO.inspect(res)
+      inspect(res)
     end
   end
 end

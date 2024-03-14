@@ -1,4 +1,7 @@
 defmodule Agrex.Schema.Farm do
+  @moduledoc """
+  Agrex.Schema.Farm is a schema for a farm.
+  """
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -79,13 +82,14 @@ defmodule Agrex.Schema.Farm do
 
   @primary_key false
   embedded_schema do
-    field :id, :string
-    field :name, :string
-    field :nbr_of_robots, :integer
-    field :nbr_of_life, :integer
+    field(:id, :string)
+    field(:name, :string)
+    field(:nbr_of_robots, :integer)
+    field(:nbr_of_lives, :integer)
   end
 
-  defp id_prefix, do: "farm"
+  defp id_prefix,
+    do: "farm"
 
   def changeset(farm, args) do
     farm
@@ -94,13 +98,13 @@ defmodule Agrex.Schema.Farm do
       [
         :name,
         :nbr_of_robots,
-        :nbr_of_life
+        :nbr_of_lives
       ]
     )
     |> validate_required([
       :name,
       :nbr_of_robots,
-      :nbr_of_life
+      :nbr_of_lives
     ])
   end
 
@@ -137,7 +141,7 @@ defmodule Agrex.Schema.Farm do
         Agrex.Schema.Id.new(id_prefix())
         |> Id.as_string(),
       name: random_name(),
-      nbr_of_life:
+      nbr_of_lives:
         normalize(
           abs(
             :rand.uniform(Agrex.Limits.max_lives()) -

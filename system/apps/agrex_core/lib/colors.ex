@@ -4,7 +4,7 @@ defmodule Colors do
   Colors is the module that contains the colors for the Agrex System
   """
 
-  def reset, do: "\e[0]"
+  def reset, do: "\e[0m"
   def red_on_black, do: "\e[31;40m"
   def green_on_black, do: "\e[32;40m"
   def yellow_on_black, do: "\e[33;40m"

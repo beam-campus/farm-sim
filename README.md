@@ -46,8 +46,8 @@ Please check out the [Instructions](https://thinkingelixir.com/install-elixir-us
 ### Running in interactive mode
 
 ```bash
-git clone https://github.com/discomco-ex/farm-sim.git
-cd farm-sim/system/apps/agrex
+git clone https://github.com/beam-campus/farm-sim.git
+cd farm-sim/system/apps/agrex_edge
 iex -S mix
 
 ```
@@ -56,9 +56,9 @@ iex -S mix
 
 ### Maybe you want to play around with scale?
 
-- :bulb: Checkout the `agrex/lib/limits.ex` file... 
+- :bulb: Checkout the `agrex/lib/limits.ex` file...
 - Please keep in mind that Erlang/OTP was built for scalability.
 - If you feel the need to live dangerously, be my guest.  
 Nothing _should_ catch on fire... :smirk:
 
-![1704159523977](image/README/1704159523977.png) 
+![1704159523977](image/README/1704159523977.png)

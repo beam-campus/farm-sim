@@ -14,7 +14,7 @@ defmodule Agrex.Edge.MixProject do
       deps: deps(),
       # ExDoc
       name: "FarmSim Edge",
-      source_url: "https://github.com/discomco-ex/farm-sim",
+      source_url: "https://github.com/beam-campus/farm-sim",
       homepage_url: "https://discomco.pl",
       docs: [
         main: "Agrex Edge",
@@ -36,7 +36,8 @@ defmodule Agrex.Edge.MixProject do
     [
       {:slipstream, "~>1.1.0"},
       {:commanded, "~> 1.4"},
-      {:agrex_core, in_umbrella: true}
+      {:agrex_core, in_umbrella: true},
+      {:countries, in_umbrella: true},
     ]
   end
 end

@@ -1,76 +1,72 @@
 defmodule Agrex.Landscape.Regions do
-  use DynamicSupervisor
+  @moduledoc """
+  Agrex.Landscape.Regions is the top-level supervisor for the Agrex.MngLandscape subsystem.
+  """
+  use GenServer
 
   require Logger
-  import LogHelper
 
-  ###### INTERFACES #############
-  def child_spec(landscape_params) do
-    spec = %{
-      id: __MODULE__,
-      start: {__MODULE__, :start_link, [landscape_params, []]},
-      type: :supervisor,
-      restart: :permanent,
-      shutdown: 500
-    }
+  ################ API ########################
+  def start_region(landscape_id, region_init) do
+    Logger.debug(" REGION ~> #{landscape_id}.#{region_init.id} - #{region_init.nbr_of_farms} farms")
+    DynamicSupervisor.start_child(
+      via_sup(landscape_id),
+      {Agrex.Region.System, region_init}
+    )
 
-    log_spec(spec)
   end
 
   @doc """
   Returns the list of children supervised by this module
   """
-  def which_children() do
-    DynamicSupervisor.which_children(__MODULE__)
+  def which_children(key) do
+    try do
+      %{
+        key: key,
+        children:
+          DynamicSupervisor.which_children(via_sup(key))
+          |> Enum.reverse()
+      }
+    rescue
+      e -> {:error, "which_children:#{inspect(e)}"}
+    end
   end
 
-  def start_link(landscape_params, opts \\ []) do
-    Logger.info("in:landscape: #{inspect(landscape_params)}, in:opts: #{inspect(opts)}")
-
-    res =
-      DynamicSupervisor.start_link(
-        __MODULE__,
-        landscape_params,
-        name: __MODULE__
-      )
-
-    log_res(res)
-  end
-
-  def start_region_system(region_id) do
-    Logger.debug("in:region_id=#{inspect(region_id)}")
-    res_sys =
-      DynamicSupervisor.start_child(
-        __MODULE__,
-        {Agrex.Region.System, region_id}
-      )
-
-    log_res(res_sys)
-  end
-
-  ######### IMPLEMENTATION ############
-  # @impl DynamicSupervisor
-  def init(landscape_params) do
-    Logger.info("in:landscape_params: #{inspect(landscape_params)}")
-
-    DynamicSupervisor.init(
-      name: __MODULE__,
+  ######### CALLBACKS ############
+  @impl GenServer
+  def init(landscape_init) do
+    DynamicSupervisor.start_link(
+      name: via_sup(landscape_init.id),
       strategy: :one_for_one
     )
+
+    {:ok, landscape_init}
   end
 
-  ########### PRIVATE #####################
-  # defp do_start_landscape_worker(landscape_params) do
-  #   Logger.debug("in:landscape_params=#{inspect(landscape_params)}")
+  ############ PLUMBING ###################
+  def to_name(key) when is_bitstring(key),
+    do: "landscape.regions.#{key}"
 
-  #   res =
-  #     DynamicSupervisor.start_child(
-  #       __MODULE__,
-  #       {
-  #         Agrex.Landscape.Worker,
-  #         landscape_params
-  #       }
-  #     )
-  #   log_res(res)
-  # end
+  def via_sup(key),
+    do: Agrex.Registry.via_tuple({:regions_sup, to_name(key)})
+
+  def via(key),
+    do: Agrex.Registry.via_tuple({:regions, to_name(key)})
+
+  def child_spec(landscape_init),
+    do: %{
+      id: to_name(landscape_init.id),
+      start: {__MODULE__, :start_link, [landscape_init]},
+      type: :supervisor,
+      restart: :permanent,
+      shutdown: 500
+    }
+
+  def start_link(landscape_init),
+    do:
+      GenServer.start_link(
+        __MODULE__,
+        landscape_init,
+        name: via(landscape_init.id)
+      )
 end

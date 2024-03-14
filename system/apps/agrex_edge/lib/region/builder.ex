@@ -1,49 +1,50 @@
 defmodule Agrex.Region.Builder do
+  @moduledoc """
+  Agrex.Region.Builder is a GenServer that constructs an Agrex.Region
+  by spawning Agrex.MngFarm Processes.
+  """
   use GenServer
-  require Logger
-  import LogHelper
 
-  # INTERFACE
+  ############# API ################
+
+  ############# CALLBACKS ############
+  @impl GenServer
+  def init(region_init) do
+    do_build(region_init)
+    {:ok, region_init}
+  end
+
+  ############# INTERNALS ############
+  defp do_build(region_init) do
+    Enum.to_list(1..region_init.nbr_of_farms)
+    |> Enum.map(&do_random_mng_farm_init/1)
+    |> Enum.each(&Agrex.Region.Farms.start_farm(region_init.id, &1))
+  end
+
+  defp do_random_mng_farm_init(_i),
+    do: Agrex.MngFarm.InitParams.random(Agrex.Schema.Farm.random())
+
+  ################# PLUMBING ################
+  def to_name(key),
+    do: "region.builder.#{key}"
 
   def via(region_id),
-    do: Agrex.Registry.via_tuple(to_name(region_id))
+    do: Agrex.Registry.via_tuple({:builder, to_name(region_id)})
 
-  def child_spec(region_id) do
+  def child_spec(%{id: region_id} = region_init) do
     %{
       id: to_name(region_id),
-      start: {__MODULE__, :start_link, [region_id]},
+      start: {__MODULE__, :start_link, [region_init]},
       restart: :temporary,
       type: :worker
     }
   end
 
-  def start_link(region_id) do
-    res =
+  def start_link(%{id: region_id} = region_init),
+    do:
       GenServer.start_link(
         __MODULE__,
-        region_id,
+        region_init,
         name: via(region_id)
       )
-    log_res(res)
-  end
-
-  # CALLBACKS
-
-  @impl GenServer
-  def init(region_id) do
-    Logger.debug("\n\n\tin:region_id = #{inspect(region_id)} \n")
-
-    res =
-      Agrex.Region.Worker.init_region(
-        region_id,
-        :rand.uniform(Agrex.Limits.max_farms())
-      )
-
-    Logger.debug("\n\n\tout:res = #{inspect(res)}\n")
-    {:ok, region_id}
-  end
-
-  # PRIVATES
-  defp to_name(region_id),
-    do: "region.builder.#{region_id}"
 end

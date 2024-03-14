@@ -9,7 +9,7 @@ defmodule Agrex.Born2Died.State do
   defguard is_born_2_died_state(state) when is_struct(state, __MODULE__)
 
   @id_prefix "born2died"
-  
+
   @status %{
     unknown: 0,
     initialized: 1,
@@ -55,6 +55,19 @@ defmodule Agrex.Born2Died.State do
       edge_id: Agrex.Core.constants()[:edge_id],
       field_id: Id.new("field", to_string(1)) |> Id.as_string(),
       life: Agrex.Schema.Life.random(),
+      pos: Agrex.Schema.Position.random(1_000, 1_000),
+      vitals: Agrex.Schema.Vitals.random(),
+      ticks: 0,
+      status: 0
+    }
+  end
+
+  def from_life(life) do
+    %Agrex.Born2Died.State{
+      id: Id.new(@id_prefix) |> Id.as_string(),
+      edge_id: Agrex.Core.constants()[:edge_id],
+      field_id: Id.new("field", to_string(1)) |> Id.as_string(),
+      life: life,
       pos: Agrex.Schema.Position.random(1_000, 1_000),
       vitals: Agrex.Schema.Vitals.random(),
       ticks: 0,

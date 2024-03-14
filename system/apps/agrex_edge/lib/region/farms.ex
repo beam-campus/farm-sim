@@ -1,74 +1,57 @@
 defmodule Agrex.Region.Farms do
+  @moduledoc """
+  Agrex.Region.Farms is the top-level supervisor for the Agrex.Region subsystem.
+  """
   use GenServer
-  # use DynamicSupervisor
 
   require Logger
-  import LogHelper
 
-  ############### INTERFACE ###################
-  def start_farm(region_id, farm) do
-    GenServer.call(
-      via(region_id),
-      {:start_farm, farm}
+  ############### API ###################
+
+  def start_farm(region_id, mng_farm_init) do
+    Logger.debug("\tFARM ~> #{region_id}: #{mng_farm_init.farm.name} - #{mng_farm_init.nbr_of_lives} lifes")
+    DynamicSupervisor.start_child(
+      via_sup(region_id),
+      {Agrex.MngFarm.System, mng_farm_init}
     )
+
   end
 
-  def via(region_id),
-    do: Agrex.Registry.via_tuple(to_name(region_id))
+  ################# CALLBACKS #####################
 
-  def child_spec(region_id) do
+  @impl GenServer
+  def init(region_init) do
+    DynamicSupervisor.start_link(
+      name: via_sup(region_init.id),
+      strategy: :one_for_one
+    )
+    {:ok, region_init}
+  end
+
+  ################ PLUMBING ####################
+  def to_name(region_id),
+    do: "region.farms.#{region_id}"
+
+  def via(key),
+    do: Agrex.Registry.via_tuple({:farms, to_name(key)})
+
+  def via_sup(key),
+    do: Agrex.Registry.via_tuple({:farms_sup, to_name(key)})
+
+  def child_spec(region_init) do
     %{
-      id: to_name(region_id),
-      start: {__MODULE__, :start_link, [region_id]},
+      id: to_name(region_init.id),
+      start: {__MODULE__, :start_link, [region_init]},
       type: :supervisor,
       restart: :transient
     }
   end
 
-  def start_link(region_id) do
-
-    res =
-      DynamicSupervisor.start_link(
-        __MODULE__,
-        name: via(to_sup(region_id)),
-        strategy: :one_for_one
-      )
-
-    log_res(res)
-
-    res =
+  def start_link(%{id: region_id} = region_init),
+    do:
       GenServer.start_link(
         __MODULE__,
-        region_id,
+        region_init,
         name: via(region_id)
       )
-    log_res(res)
-  end
-
-  ################# IMPLEMENTATION #####################
-  @impl GenServer
-  def handle_call({:start_farm, farm}, _from, state = region_id) do
-    Logger.debug("\n\n\tin:farm = #{inspect(farm)} \n\tin:region_id = #{inspect(region_id)}\n")
-    res =
-      DynamicSupervisor.start_child(
-        via(to_sup(region_id)),
-        { Agrex.Farm.System, farm: farm, region_id: region_id }
-      )
-    log_res(res)
-    {:reply, {:ok, res}, state}
-  end
-
-  @impl GenServer
-  def init(region_id) do
-    Logger.debug("in:region_id = #{inspect(region_id)}")
-    {:ok, region_id}
-  end
-
-  # PRIVATES
-  defp to_sup(region_id),
-    do: "sup.#{region_id}"
-
-  defp to_name(region_id),
-    do: "region.farms.#{region_id}"
-
 end

@@ -7,7 +7,7 @@ defmodule Agrex.MngHerd.State do
   Documentation for `Agrex.MngHerd.State`.
   """
 
-  @prefix "herd"
+  @prefix "mng-herd"
 
   @primary_key false
   embedded_schema do
@@ -25,5 +25,5 @@ defmodule Agrex.MngHerd.State do
       map: map
     }
   end
-  
+
 end

@@ -10,12 +10,12 @@ defmodule Agrex.MngHerd.Builder do
   @impl GenServer
   def init(%{size: size} = state) do
     Enum.to_list(1..size)
-    |> Enum.each(&do_start_life(&1, state))
+    |> Enum.each(&do_start_born2died(&1, state))
     {:ok, state}
   end
 
   #############  INTERNALS #############
-  defp do_start_life(_index, %{id: herd_id, map: map, edge_id: edge_id} = state) do
+  defp do_start_born2died(_index, %{id: herd_id, map: map, edge_id: edge_id} = state) do
     Logger.debug("in:state = #{inspect(state)}")
     life = Agrex.Schema.Life.random()
     born2died_state = Agrex.Born2Died.State.random(edge_id, map, life)
@@ -29,7 +29,7 @@ defmodule Agrex.MngHerd.Builder do
     do: Agrex.Registry.via_tuple({:worker, to_name(key)})
 
   def to_name(herd_id) when is_bitstring(herd_id),
-    do: "herd.builder.#{herd_id}"
+    do: "mng_herd.builder.#{herd_id}"
 
   def child_spec(%{id: herd_id} = state) do
     %{

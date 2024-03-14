@@ -1,9 +1,9 @@
-defmodule Agrex.Core.MixProject do
+defmodule Countries.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :agrex_core,
+      app: :countries,
       version: "0.1.0",
       build_path: "../../_build",
       config_path: "../../config/config.exs",
@@ -13,21 +13,21 @@ defmodule Agrex.Core.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       # ExDoc
-      name: "FarmSim Core Library",
-      source_url: "https://github.com/discomco-ex/farm-sim",
+      name: "Countries Library",
+      source_url: "https://github.com/beam-campus/farm-sim/system/apps/countries",
       homepage_url: "https://discomco.pl",
       docs: [
-        main: "Agrex Core Library",
+        main: "Countries Library",
         extras: ["README.md"]
       ]
+
     ]
   end
 
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: {Agrex.Core.Application, []},
-      extra_applications: [:logger, :eex, :wx]
+      extra_applications: [:logger, :eex, :observer]
     ]
   end
 
@@ -38,14 +38,13 @@ defmodule Agrex.Core.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:phoenix_pubsub, "~> 2.1"},
-      {:ecto, "~> 3.10"},
       {:uuid, "~> 1.1"},
       {:jason, "~> 1.3"},
-      {:mix_test_watch, "~> 1.1", only: [:dev, :test], runtime: false},
+      {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.27", only: [:dev], runtime: false},
-      {:req, "~> 0.4.5"}
+      {:req, "~> 0.4.5"},
+      {:typed_struct, "~> 0.3.0"}
     ]
   end
 end

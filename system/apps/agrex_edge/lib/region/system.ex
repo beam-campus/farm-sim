@@ -1,59 +1,57 @@
 defmodule Agrex.Region.System do
-  @moduledoc """
-  Agrex.Region.System is a data structure that represents a Region in the Agrex system.
-  """
   use GenServer
-
+  @moduledoc """
+  Agrex.Region.System is the topmost supervisor for a Region.
+  """
   require Logger
 
+  ############## API ###################
 
-  # INTERFACES
+  ############## CALLBACKS #############
+  @impl GenServer
+  def init(%{id: region_id} = region_init) do
+    children = [
+      {Agrex.Region.Farms, region_init},
+      {Agrex.Region.Builder, region_init}
+    ]
+    Supervisor.start_link(
+      children,
+      name: via_sup(region_id),
+      strategy: :one_for_one
+    )
+    {:ok, region_init}
+  end
+
+  ########### INTERNALS ############
+
+  ############ PLUMBING ############
+  def to_name(region_id),
+    do: "region.system.#{region_id}"
 
   def via(key),
-    do: Agrex.Registry.via_tuple(to_name(key))
+    do: Agrex.Registry.via_tuple({:region_sys, to_name(key)})
 
-  def child_spec(region_id) do
+  def via_sup(key),
+    do: Agrex.Registry.via_tuple({:region_sup, to_name(key)})
+
+  def child_spec(%{id: region_id} = region_init) do
     %{
       id: to_name(region_id),
-      start: {__MODULE__, :start_link, [region_id]},
+      start: {__MODULE__, :start_link, [region_init]},
       type: :supervisor,
       restart: :transient
     }
   end
 
   def which_children(region_id) do
-    Supervisor.which_children(via(to_sup(region_id)))
+    Supervisor.which_children(via_sup(region_id))
   end
 
-  def start_link(region_id) do
-    Logger.debug("\n\tin:region_id = #{inspect(region_id)}")
-    children = [
-      {Agrex.Region.Farms, region_id},
-      {Agrex.Region.Worker, region_id},
-      {Agrex.Region.Builder, region_id},
-    ]
-    res = Supervisor.start_link(
-      children,
-      name: via(to_sup(region_id)),
-      strategy: :one_for_one
-    )
-    inspect(res)
-  end
-
-  # CALLBACKS
-  @impl GenServer
-  def init(init_arg) do
-    Logger.debug("\n\n\tin:init_arg = #{inspect(init_arg)}\n")
-    {:ok, init_arg}
-  end
-
-
-  # PRIVATES
-  defp to_name(region_id),
-    do: "region.system.#{region_id}"
-
-    defp to_sup(region_id),
-    do: "sup.#{region_id}"
-
-
+  def start_link(%{id: region_id} = region_init),
+    do:
+      GenServer.start_link(
+        __MODULE__,
+        region_init,
+        name: via(region_id)
+      )
 end

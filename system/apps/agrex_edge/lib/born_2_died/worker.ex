@@ -4,7 +4,6 @@ defmodule Agrex.Born2Died.Worker do
   """
   use GenServer
   require Logger
-  import LogHelper
 
   alias Agrex.Born2Died.Rules
 
@@ -35,7 +34,7 @@ defmodule Agrex.Born2Died.Worker do
       callback_function: &do_live/1,
       caller_state: state
     })
-
+    Logger.debug(" \t\tBORN: #{state.life.name}  #{state.life.gender}")
     {:ok, state}
   end
 
@@ -60,17 +59,18 @@ defmodule Agrex.Born2Died.Worker do
 
   ############################### INTERNALS #############################
   defp to_name(life_id),
-    do: "life.worker.#{life_id}"
+    do: "born_2_died.worker.#{life_id}"
 
   defp do_live(state) do
     state =
       state
       |> do_process()
 
-    Logger.debug(
-      "[#{state.life.name}] status: [#{to_string(state.status)}] at age #{state.vitals.age}."
-    )
-    Agrex.Born2Died.Aggregate.execute(state.life.id)
+    # Logger.debug(
+    #   "[#{state.life.name}] status: [#{to_string(state.status)}] at age #{state.vitals.age}."
+    # )
+
+    # Agrex.Born2Died.Aggregate.execute(state.life.id)
 
     Agrex.Born2Died.System.live(state.life.id)
     state
@@ -125,14 +125,11 @@ defmodule Agrex.Born2Died.Worker do
     }
   end
 
-  def start_link(state) do
-    res =
+  def start_link(state),
+    do:
       GenServer.start_link(
         __MODULE__,
         state,
         name: via(state.life.id)
       )
-
-    log_res(res)
-  end
 end

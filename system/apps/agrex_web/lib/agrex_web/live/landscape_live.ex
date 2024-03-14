@@ -3,7 +3,7 @@ defmodule AgrexWeb.LandscapeLive do
 
   def mount(_params, _session, socket) do
     new_socket = assign(socket, name: "FarmTrax", nbr_of_farms: 3)
-    IO.inspect(new_socket)
+    inspect(new_socket)
     {:ok, new_socket}
   end
 

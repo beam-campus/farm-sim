@@ -16,11 +16,7 @@ defmodule Agrex.MngHerd.System do
   end
 
   def get_state(herd_id),
-    do:
-      GenServer.call(
-        via(herd_id),
-        {:get_state, herd_id}
-      )
+    do: GenServer.call(via(herd_id), {:get_state, herd_id})
 
   ################ CALLBACKS #############
   @impl GenServer
@@ -31,7 +27,6 @@ defmodule Agrex.MngHerd.System do
     )
     {:noreply, state}
   end
-
 
   @impl GenServer
   def init(state) do
@@ -68,13 +63,11 @@ defmodule Agrex.MngHerd.System do
   def to_name(herd_id),
     do: "herd.system.#{herd_id}"
 
-
   def via(key) when is_bitstring(key),
     do: Agrex.Registry.via_tuple({:system, to_name(key)})
 
- def via_sup(key) when is_bitstring(key),
+  def via_sup(key) when is_bitstring(key),
     do: Agrex.Registry.via_tuple({:supervisor, to_name(key)})
-
 
   def child_spec(%{id: herd_id} = state) do
     %{
