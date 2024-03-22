@@ -7,40 +7,34 @@ defmodule Agrex.Born2Died.Emitter do
   require Logger
 
   ############ API ###########
-  def await_join(edge_id, life_id) do
-    GenServer.call(
-      via(life_id),
-      {:join, edge_id}
-    )
-  end
+  # def await_join(edge_id, life_id) do
+  #   GenServer.call(
+  #     via(life_id),
+  #     {:join, edge_id}
+  #   )
+  # end
+
 
   def emit_born(life_id, fact) do
-    GenServer.cast(
-      via(life_id),
-      {:emit_born, fact}
+    Agrex.Edge.Client.publish(
+      life_id,
+      "edge_born_v1",
+      fact
     )
+    # GenServer.cast(
+    #   via(life_id),
+    #   {:emit_born, fact}
+    # )
   end
 
-  def await_emit_born(life_id, fact) do
-    GenServer.call(
-      via(life_id),
-      {:emit_born, fact}
-    )
-  end
 
-  def emit_died(life_id, fact),
+  def emit_died(life_id, b2d_state),
     do:
       GenServer.cast(
         via(life_id),
-        {:emit_died, fact}
+        {:emit_died, b2d_state}
       )
 
-  def await_emit_died(life_id, fact) do
-    GenServer.call(
-      via(life_id),
-      {:emit_died, fact}
-    )
-  end
 
   def via(life_id),
     do: Agrex.Registry.via_tuple({:emitter, to_name(life_id)})
@@ -62,7 +56,6 @@ defmodule Agrex.Born2Died.Emitter do
       )
 
   ############ CALLBACKS ###########
-
   @impl GenServer
   def init(state),
     do: {:ok, state}

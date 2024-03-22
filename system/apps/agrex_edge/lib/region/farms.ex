@@ -14,7 +14,6 @@ defmodule Agrex.Region.Farms do
       via_sup(region_id),
       {Agrex.MngFarm.System, mng_farm_init}
     )
-
   end
 
   ################# CALLBACKS #####################

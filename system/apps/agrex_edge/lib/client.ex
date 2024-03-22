@@ -9,6 +9,7 @@ defmodule Agrex.Edge.Client do
   """
 
   @edge_lobby "edge:lobby"
+  @edge_attached_v1 "edge:attached:v1"
   # @joined_edge_lobby "edge:lobby:joined"
 
   ############# API ################
@@ -33,19 +34,20 @@ defmodule Agrex.Edge.Client do
   def init(args) do
     socket =
       new_socket()
-      |> assign(:edge_id, args.edge_id)
+      |> assign(:landscape_init, args.landscape_init)
       |> connect!(args.config)
     {:ok, socket, {:continue, :start_ping}}
   end
 
   @impl Slipstream
   def handle_connect(socket) do
-    {:ok, join(socket, @edge_lobby, %{edge_id: socket.assigns.edge_id})}
+    {:ok, join(socket, @edge_lobby, %{landscape_init: socket.assigns.landscape_init})}
   end
 
   @impl Slipstream
   def handle_join(@edge_lobby, _join_response, socket) do
-    push(socket, @edge_lobby, "edge:attached:v1", %{edge_id: socket.assigns.edge_id})
+    push(socket, @edge_lobby, @edge_attached_v1, %{landscape_init: socket.assigns.landscape_init})
+    # {:noreply, socket}
     {:ok, socket}
   end
 
@@ -76,12 +78,12 @@ defmodule Agrex.Edge.Client do
   def via(edge_id),
     do: Agrex.Registry.via_tuple({:client, to_name(edge_id)})
 
-  def child_spec(edge_id) do
+  def child_spec(landscape_init) do
     config = Application.fetch_env!(:agrex_edge, __MODULE__)
 
     %{
-      id: to_name(edge_id),
-      start: {__MODULE__, :start_link, [%{config: config, edge_id: edge_id}]},
+      id: to_name(landscape_init.edge_id),
+      start: {__MODULE__, :start_link, [%{config: config, landscape_init: landscape_init}]},
       restart: :transient,
       type: :worker
     }
@@ -92,6 +94,6 @@ defmodule Agrex.Edge.Client do
       Slipstream.start_link(
         __MODULE__,
         args,
-        name: via(args.edge_id)
+        name: via(args.landscape_init.edge_id)
       )
 end

@@ -1,11 +1,13 @@
 defmodule Agrex.Region.Builder do
+  use GenServer
   @moduledoc """
   Agrex.Region.Builder is a GenServer that constructs an Agrex.Region
   by spawning Agrex.MngFarm Processes.
   """
-  use GenServer
 
-  ############# API ################
+  require Logger
+
+
 
   ############# CALLBACKS ############
   @impl GenServer

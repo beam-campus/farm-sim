@@ -17,13 +17,6 @@ defmodule AgrexWeb.Endpoint do
            connect_info: [session: @session_options]
          ]
 
-  # socket "/edge_socket",
-  #        AgrexWeb.EdgeSocket,
-  #        websocket: [
-  #          connect_info: [session: @session_options]
-  #        ],
-  #        longpoll: false
-
   socket "/edge_socket",
          AgrexWeb.EdgeSocket,
          websocket: true,

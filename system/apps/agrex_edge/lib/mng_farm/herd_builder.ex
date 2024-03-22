@@ -4,12 +4,30 @@ defmodule Agrex.MngFarm.HerdBuilder do
   """
   use GenServer
 
-  
   ##### CALLBACKS #####
   @impl GenServer
   def init(mng_farm_init) do
+    Process.flag(:trap_exit, true)
     Agrex.MngFarm.Herd.populate(mng_farm_init)
     {:ok, mng_farm_init}
+  end
+
+  @impl GenServer
+  def terminate(reason, state) do
+    {:ok, reason, state}
+  end
+
+  ###### HANDLE_CAST
+  @impl GenServer
+  def handle_cast({:build_herd, mng_farm_init}, state) do
+    Agrex.MngFarm.Herd.populate(mng_farm_init)
+    {:noreply, state}
+  end
+
+  ###### HANDLE_INFO
+  @impl GenServer
+  def handle_info({:EXIT, _from, reason}, state) do
+    {:stop, reason, state}
   end
 
   ####### PLUMBING ########

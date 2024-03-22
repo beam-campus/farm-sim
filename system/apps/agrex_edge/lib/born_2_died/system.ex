@@ -9,49 +9,77 @@ defmodule Agrex.Born2Died.System do
   require Logger
 
   ######### API #####################
-  def live(life_id),
-    do: GenServer.cast(via(life_id), {:live, life_id})
+  # def live(life_id),
+  #   do:
+  #     GenServer.cast(
+  #       via(life_id),
+  #       {:live, life_id}
+  #     )
 
-  def die(life_id),
-    do: GenServer.cast(via(life_id), {:die, life_id})
+  # def die(life_id),
+  #   do:
+  #     GenServer.cast(
+  #       via(life_id),
+  #       {:die, life_id}
+  #     )
 
   def stop(life_id) do
-    Supervisor.stop(via_sup(life_id), reason: :normal)
-    GenServer.stop(via(life_id), reason: :normal)
+    try do
+      Supervisor.stop(via_sup(life_id), :shutdown)
+    rescue
+      _ -> :ok
+    end
   end
 
   ########################## CALLBACKS ####################################
   @impl GenServer
   def init(state) do
+    # Process.flag(:trap_exit, true)
+
     children =
       [
-        {Agrex.Born2Died.Aggregate, state},
-        {Agrex.Born2Died.Emitter, state},
+        # {Agrex.Born2Died.Aggregate, state, log: :false},
+        # {Agrex.Born2Died.Emitter, state},
         {Agrex.Born2Died.Worker, state}
       ]
+
     Supervisor.start_link(
       children,
       name: via_sup(state.life.id),
       strategy: :one_for_one
     )
+
     {:ok, state}
   end
 
+  ############### CALLBACKS ############################
   @impl GenServer
-  def handle_cast({:live, life_id}, state) do
-    Agrex.Born2Died.Worker.live(life_id)
-    {:noreply, state}
+  def terminate(_reason, _state) do
+    :ok
   end
 
-  def handle_cast({:die, life_id}, state) do
-    Agrex.Born2Died.Worker.die(life_id)
-    {:noreply, state}
+  ######### handle_info
+  @impl GenServer
+  def handle_info({:EXIT, _from_id, reason}, state) do
+    # Agrex.Born2Died.Worker.die(state.life.id)
+    {:stop, reason, state}
   end
+
+  ######## handle_cast
+  # @impl GenServer
+  # def handle_cast({:live, life_id}, state) do
+  #   Agrex.Born2Died.Worker.live(life_id)
+  #   {:noreply, state}
+  # end
+
+  # def handle_cast({:die, life_id}, state) do
+  #   Agrex.Born2Died.Worker.die(life_id)
+  #   {:noreply, state}
+  # end
 
   ########################## INTERNALS ########################################
   defp to_name(life_id),
     do: "born_2_died.system.#{life_id}"
-
 
   ############# PLUMBING ##################
   def via(life_id),
@@ -65,7 +93,7 @@ defmodule Agrex.Born2Died.System do
       id: to_name(state.life.id),
       start: {__MODULE__, :start_link, [state]},
       type: :supervisor,
-      restart: :temporary
+      restart: :transient
     }
   end
 

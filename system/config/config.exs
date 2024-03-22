@@ -18,7 +18,7 @@ config :agrex_edge, Agrex.Edge.Client,
   reconnect_after_msec: [200, 500, 1_000, 2_000]
 
 # Configure the basic settings of the application
-config :agrex_core, 
+config :agrex_core,
   edge_id: "edge_1"
 
 

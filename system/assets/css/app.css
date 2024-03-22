@@ -2,3 +2,14 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+.landscape-card {
+    /* Add styles for landscape cards */
+  }
+  
+  .region-card {
+    /* Add styles for region cards */
+  }
+  
+  .farm-card {
+    /* Add styles for farm cards */
+  }

@@ -9,7 +9,7 @@ defmodule Agrex.Core.MixProject do
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
-      elixir: "~> 1.15",
+      elixir: "~> 1.16",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       # ExDoc
@@ -42,10 +42,12 @@ defmodule Agrex.Core.MixProject do
       {:ecto, "~> 3.10"},
       {:uuid, "~> 1.1"},
       {:jason, "~> 1.3"},
+      {:req, "~> 0.4.5"},
+      {:dialyze, "~> 0.2.0", only: [:dev]},
       {:mix_test_watch, "~> 1.1", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:ex_doc, "~> 0.27", only: [:dev], runtime: false},
-      {:req, "~> 0.4.5"}
+      {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
     ]
   end
 end

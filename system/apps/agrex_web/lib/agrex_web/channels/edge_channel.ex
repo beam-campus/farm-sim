@@ -10,13 +10,18 @@ defmodule AgrexWeb.EdgeChannel do
   @hope_shout "hope:shout"
   @hope_ping "ping"
   @hope_join_edge "join_edge"
+  @edge_attached_v1 "edge:attached:v1"
+  @pubsub_attached_v1 "edge_attached_v1"
+
+
 
   require Logger
+  require Phoenix.PubSub
+  require Agrex.Edge.Facts
 
   ################ CALLBACKS ################
   @impl true
-  def join("edge:lobby", payload, socket) do
-    Logger.debug("EdgeChannel.join:\n\n socket: #{inspect(socket)} \n\n payload: #{inspect(payload)}")
+  def join("edge:lobby", _payload, socket) do
     {:ok, socket}
   end
 
@@ -25,6 +30,13 @@ defmodule AgrexWeb.EdgeChannel do
   def handle_in("hello", payload, socket) do
     Logger.debug("in: 'hello' #{inspect(payload)}")
     {:reply, {:ok, payload}, socket}
+  end
+
+  @impl true
+  def handle_in(@edge_attached_v1, landscape_init, socket) do
+    Logger.debug("EdgeChannel.handle_in: #{@edge_attached_v1}. Publishing #{inspect(landscape_init)} to #{@pubsub_attached_v1}")
+    Phoenix.PubSub.broadcast!(Agrex.PubSub, @pubsub_attached_v1, {@pubsub_attached_v1, landscape_init})
+    {:reply, {:ok, landscape_init}, socket}
   end
 
 

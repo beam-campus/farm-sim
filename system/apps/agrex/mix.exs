@@ -9,7 +9,7 @@ defmodule Agrex.MixProject do
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
-      elixir: "~> 1.15",
+      elixir: "~> 1.16",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -17,7 +17,7 @@ defmodule Agrex.MixProject do
 
       # ExDoc
       name: "FarmSim Engine",
-      source_url: "https://github.com/discomco-ex/farm-sim",
+      source_url: "https://github.com/beam-campus/farm-sim",
       homepage_url: "https://discomco.pl",
       docs: [
         main: "Agrex",

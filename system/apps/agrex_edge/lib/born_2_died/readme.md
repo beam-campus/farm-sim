@@ -1,6 +1,6 @@
 # Agrex.Born2Died Subsystem
 
-The Agrex.Born2Died subsystem is responsible for controlling and simulating the life of farm animal.
+The Agrex.Born2Died subsystem is responsible for controlling and simulating the Born2Died of farm animal.
 
 ## Outline
 
@@ -34,12 +34,12 @@ graph TD
 
 ```mermaid
 sequenceDiagram
-  participant Life.System
-  participant Life.Supervisor
-  participant Life.Worker
-  participant Life.Channel
+  participant Born2Died.System
+  participant Born2Died.Supervisor
+  participant Born2Died.Worker
+  participant Born2Died.Channel
 
-  Life.System->>Life.Supervisor : start_link(life_id)
+  Born2Died.System->>Born2Died.Supervisor : start_link(Born2Died_id)
 
 ```
 

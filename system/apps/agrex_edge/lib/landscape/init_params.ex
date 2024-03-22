@@ -4,6 +4,8 @@ defmodule Agrex.Landscape.InitParams do
   """
   use Ecto.Schema
 
+  @derive {Jason.Encoder,
+           only: [:id, :edge_id, :nbr_of_countries, :min_area, :min_people, :select_from]}
   @primary_key false
   embedded_schema do
     field(:id, :string)

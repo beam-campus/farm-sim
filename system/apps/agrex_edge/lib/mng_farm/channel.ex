@@ -5,10 +5,11 @@ defmodule Agrex.MngFarm.Channel do
    This module provides functionality for handling communication channels in the Agrex Farm system.
   """
 
+  require Logger
+
   ###### API ######
-  def via(farm_id) do
-    {:via, Registry, to_name(farm_id)}
-  end
+  def via(farm_id),
+    do: {:via, Registry, to_name(farm_id)}
 
   @doc """
    Starts the channel process.

@@ -36,21 +36,25 @@ defmodule AgrexWeb.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:phoenix, "~> 1.7.7"},
-      {:phoenix_ecto, "~> 4.4"},
-      {:phoenix_html, "~> 3.3"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.19.0"},
-      {:floki, ">= 0.30.0", only: :test},
-      {:phoenix_live_dashboard, "~> 0.8.0"},
+      {:phoenix, "~> 1.7.11", override: true},
+      {:phoenix_ecto, "~> 4.5.1"},
+      {:ecto_sql, "~> 3.7"},
+      {:postgrex, ">= 0.0.0"},
+      {:floki, ">= 0.36.1", only: :test},
+      {:phoenix_html, "~> 4.1.1"},
+      {:phoenix_live_reload, "~> 1.5.2", only: :dev},
+      {:phoenix_live_view, "~> 0.20.14"},
+      {:phoenix_live_dashboard, "~> 0.8.3"},
       {:esbuild, "~> 0.7", runtime: Mix.env() == :dev},
       {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
       {:agrex, in_umbrella: true},
-      {:jason, "~> 1.2"},
-      {:plug_cowboy, "~> 2.5"}
+      {:plug_cowboy, "~> 2.5"},
+      {:contex, "~> 0.5.0"},
+      {:heroicons, "~> 0.5.5"},
+      {:heroicons_liveview, "~> 0.5.0"},
     ]
   end
 

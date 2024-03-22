@@ -26,11 +26,11 @@ defmodule Agrex.MngFarm.System do
     {:ok, mng_farm_init}
   end
 
-  ########### INTERNALS ############
-  defp to_name(farm_id),
-    do: "mng_farm.system.#{farm_id}"
 
   ############ PLUMBING ############
+  defp to_name(farm_id),
+  do: "mng_farm.system.#{farm_id}"
+
   def via(farm_id),
     do: Agrex.Registry.via_tuple({:mng_farm_sys, to_name(farm_id)})
 

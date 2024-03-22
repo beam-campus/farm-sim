@@ -11,24 +11,18 @@ defmodule Agrex.Born2Died.BornFact do
 
   @primary_key false
   embedded_schema do
-    field :id, :string
-    field :farm_id, :string
-    field :life_id, :string
-    field :born_at, :naive_datetime
+    field(:id, :string)
+    field(:farm_id, :string)
+    field(:life_id, :string)
+    field(:born_at, :naive_datetime)
   end
-
 
   def new(farm_id, %Life{} = life) do
     %__MODULE__{
-      id: Id.new(@id_prefix) |> Id.as_string,
+      id: Id.new(@id_prefix) |> Id.as_string(),
       farm_id: farm_id,
       life_id: life.id,
       born_at: life.birth_date
     }
   end
-
-
-
-
-
 end

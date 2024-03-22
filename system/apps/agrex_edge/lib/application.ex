@@ -27,10 +27,13 @@ defmodule Agrex.Edge.Application do
 
   @impl Application
   def start(_type, _args) do
+
+    landscape_init = Agrex.Landscape.InitParams.default()
+
     children = [
       # Start Finch
       {Finch, name: Agrex.Finch},
-      {Agrex.Edge.Client, @default_edge_id},
+      {Agrex.Edge.Client, landscape_init},
       {Agrex.Countries.Cache, name: Agrex.Countries},
       # Start Landscape System
       {Agrex.Landscape.System, Agrex.Landscape.InitParams.default()},

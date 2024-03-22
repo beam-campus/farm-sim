@@ -1,6 +1,12 @@
 defmodule AgrexWeb.Router do
   use AgrexWeb, :router
 
+  @moduledoc """
+  The router that defines the application's LiveView and LiveComponent
+  """
+
+  # alias AgrexWeb.FarmSimPage
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -17,9 +23,7 @@ defmodule AgrexWeb.Router do
   scope "/", AgrexWeb do
     pipe_through :browser
 
-    live "/landscape", LandscapeLive
-
-    get "/", PageController, :home
+    live "/", FarmSimPage
   end
 
   # Other scopes may use custom stacks.

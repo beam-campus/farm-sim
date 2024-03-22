@@ -11,7 +11,7 @@ defmodule Agrex.Limits do
     ticks_per_year: 20
   ]
 
-  def max_regions, do: 3
+  def max_regions, do: 1
   def max_farms, do: 2
   def max_lives, do: 5
   def min_lives, do: 2

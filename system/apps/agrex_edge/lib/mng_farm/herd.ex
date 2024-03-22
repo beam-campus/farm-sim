@@ -37,9 +37,10 @@ defmodule Agrex.MngFarm.Herd do
   end
 
   defp do_start_born2died(mng_farm_init, life) do
-    res = DynamicSupervisor.start_child(
+    Logger.info("Starting Born2Died for life: #{life.id}")
+    DynamicSupervisor.start_child(
       via_sup(mng_farm_init.id),
-      {Agrex.Born2Died.Worker, Agrex.Born2Died.State.from_life(life)}
+      {Agrex.Born2Died.System, Agrex.Born2Died.State.from_life(life)}
     )
   end
 

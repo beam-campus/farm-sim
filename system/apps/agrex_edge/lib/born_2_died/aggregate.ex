@@ -4,6 +4,8 @@ defmodule Agrex.Born2Died.Aggregate do
   @moduledoc """
   Aggregate is a GenServer that holds the state of a Life.
   """
+
+  require Logger
   require Agrex.Born2Died.Hopes
   require Agrex.Born2Died.Facts
   alias Agrex.Born2Died.Hopes
@@ -31,6 +33,14 @@ defmodule Agrex.Born2Died.Aggregate do
   end
 
   ################ CALLBACKS #######
+
+  @impl GenServer
+  def terminate(reason, _state) do
+    Logger.debug(" \t\tDIED: #{inspect(reason)}")
+    :ok
+  end
+
+
   @impl GenServer
   def handle_call(:build_state, _from, %{state: old_state, events: events} = _state) do
     state =
