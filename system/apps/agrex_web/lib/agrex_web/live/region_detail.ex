@@ -1,6 +1,10 @@
 defmodule AgrexWeb.RegionDetail do
   use AgrexWeb, :live_component
 
+  @moduledoc """
+  RegionDetail  displays the region details page
+  """
+
   def render(assigns) do
     ~H"""
     <div class="w-screen bg-gray-700 h-200">
