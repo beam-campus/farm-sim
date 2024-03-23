@@ -3,7 +3,7 @@ defmodule AgrexWeb.MngFarmBrowser do
 
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col bg-blue-400 p-2 rounded">
+    <div class="flex flex-col bg-gray-400 p-2 rounded">
       <h2>Farms</h2>
       <div class="flex flex-col overflow-x-auto overflow-y-auto whitespace-nowrap">
         <%= for farm_index <- 1..3 do %>

@@ -7,10 +7,10 @@ defmodule AgrexWeb.RegionDetail do
 
   def render(assigns) do
     ~H"""
-    <div class="w-screen bg-gray-700 h-200">
+    <div class="w-screen bg-gray-700 h-400 px-2 py-2">
       <h2>REGION DETAILS for Poland</h2>
       <div class="flex flex-row">
-        <div class="w-1/3 overflow-y-auto">
+        <div class="w-1/2 overflow-y-auto">
           <!-- Adjust width as needed -->
           <.live_component module={AgrexWeb.MngFarmBrowser} id="mng_farm_browser" />
         </div>

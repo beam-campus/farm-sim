@@ -4,16 +4,13 @@ defmodule AgrexWeb.Born2DiedCard do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="bg-white shadow-md p-4">
-      <h2>Born2Died</h2>
-      <div class="flex flex-row">
-        <div class="w-1/2">
-          <h3>Born</h3>
-          <div class="flex flex-row">
-            <div class="w-1/2">
-              Blablabla
-            </div>
-          </div>
+    <div class="bg-green-300 shadow-md rounded">
+      <div class="px-2 py-2">
+        <div class="font-bold text-xl mb-2">Life <%= @life_index %></div>
+        <div class="text-gray-700 text-base">
+          <p>name: Bella the Cow</p>
+          <p>age: 3</p>
+          <p>health: 35</p>
         </div>
       </div>
     </div>

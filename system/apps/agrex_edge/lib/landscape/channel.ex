@@ -6,8 +6,6 @@ defmodule Agrex.Landscape.Channel do
   require Logger
 
   ############ API ##########
-  def start_link(args),
-    do: Slipstream.start_link(__MODULE__, args, name: __MODULE__)
 
   ########### CALLBACKS ################
   @impl Slipstream
@@ -15,4 +13,13 @@ defmodule Agrex.Landscape.Channel do
     {:ok, connect!(config), {:continue, :start_ping}}
   end
 
+  ############### PLUMBING ##############
+  def to_name(key) when is_bitstring(key),
+    do: "landscape.channel.#{key}"
+
+  def via(key),
+    do: Agrex.Registry.via_tuple({:regions, to_name(key)})
+
+  def start_link(args),
+    do: Slipstream.start_link(__MODULE__, args, name: __MODULE__)
 end

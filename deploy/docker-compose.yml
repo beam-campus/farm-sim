@@ -1,0 +1,257 @@
+version: '3.5'
+
+services:
+
+###### BACKING SERVICES ##########
+
+  couch:
+    image: couchdb
+    hostname: couch
+    container_name: couch
+    restart: always
+    networks:
+      - dev-net
+      - monitor-net
+
+
+  # fluentd:
+  #   restart: always
+  #   hostname: fluentd
+  #   image: local/fluentd
+  #   build: 
+  #     context: ./fluentd
+  #   # volumes:
+  #   #   - ./fluentd/conf:/fluentd/etc
+  #   container_name: fluentd
+  #   depends_on:
+  #     - couch
+  #   networks:
+  #     - monitor-net
+  #     - dev-net
+
+
+  nats:
+    restart: always
+    image: local/nats
+    build:
+      context: ./nats
+    networks:
+      - dev-net
+      - monitor-net
+    hostname: nats
+    container_name: nats
+    # logging:
+    #   driver: "fluentd"
+    #   options:
+    #     fluentd-address: fluentd:24224
+    #     tag: nats.log
+    # depends_on:
+    #   - fluentd
+
+ 
+  eventstore:
+    image: eventstore/eventstore:release-5.0.8
+    hostname: eventstore
+    restart: always
+    # depends_on:
+    #   - fluentd
+    container_name: eventstore
+    networks:
+      - dev-net
+      - monitor-net
+    # logging:
+    #   driver: "fluentd"
+    #   options:
+    #     fluentd-address: fluentd:24224
+    #     tag: eventstore.log
+
+  # elasticsearch:
+  #   image: elasticsearch
+  #   hostname: elasticsearch
+  #   container_name: elasticsearch
+  #   networks: 
+  #     - monitor-net
+  #   expose:
+  #     - 9200
+  #   ports:
+  #     - "9200:9200"
+
+ 
+
+  # natsboard:
+  #   image: local/natsboard
+  #   build:
+  #     context: ./natsboard/natsboard
+  #   hostname: natsboard
+  #   container_name: natsboard
+  #   networks:
+  #     - dev-net
+  #     - monitor-net
+
+  # surveyor:
+  #   image: synadia/nats-surveyor:${SURVEYOR_DOCKER_TAG}
+  #   container_name: nats-surveyor
+  #   restart: always
+  #   volumes:
+  #     - $NATS_SURVEYOR_CREDS:/etc/surveyor/SYS.creds
+  #     - ./observations:/observations
+  #     - ./jetstream:/jetstream
+  #   entrypoint: /nats-surveyor
+  #   command: -c ${NATS_SURVEYOR_SERVER_COUNT} -creds /etc/surveyor/SYS.creds -s "${NATS_SURVEYOR_SERVERS}" -observe /observations
+  #   networks:
+  #     - monitor-net
+  #   labels:
+  #     org.label-schema.group: "nats-monitoring"
+
+  # prometheus:
+  #   image: prom/prometheus:${PROMETHEUS_DOCKER_TAG}
+  #   container_name: prometheus
+  #   restart: always
+  #   volumes:
+  #     - ./prometheus/:/etc/prometheus/
+  #     - $PROMETHEUS_STORAGE:/usr/local/share/prometheus
+  #   command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/usr/local/share/prometheus
+  #   networks:
+  #     - monitor-net
+  #   labels:
+  #     org.label-schema.group: "nats-monitoring"
+  #   depends_on:
+  #     - surveyor
+
+  # grafana:
+  #   image: local/grafana
+  #   build:
+  #     context: ./grafana
+  #   container_name: grafana
+  #   restart: always
+  #   depends_on:
+  #     - couch      
+
+  watchtower-svc:
+    image: local/watchtower
+    build:
+      context: ./watchtower
+    networks:
+      - dev-net
+    restart: always
+    container_name: watchtower-svc
+    command: --interval 30
+    env_file:
+      - ./watchtower/.env
+    volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+
+
+######## APPLICATION SERVICES ###############
+
+#### GAMES
+#   games-svc:
+#     image: registry.macula.io/parksim-games-svc
+#     container_name: parksim-games-svc
+#     networks:
+#       - dev-net
+
+#   games-etl:
+#     image: registry.macula.io/parksim-games-etl
+#     container_name: parksim-games-etl
+#     networks:
+#       - dev-net
+
+#   games-sub:
+#     image: registry.macula.io/parksim-games-sub
+#     container_name: parksim-games-sub
+#     networks:
+#       - dev-net
+
+# #### WORLDS
+#   worlds-svc:
+#     image: registry.macula.io/parksim-worlds-svc
+#     container_name: parksim-worlds-svc
+#     networks:
+#       - dev-net
+    
+#   worlds-etl:
+#     image: registry.macula.io/parksim-worlds-etl
+#     container_name: parksim-worlds-etl
+#     networks:
+#       - dev-net
+    
+#   worlds-sub:
+#     image: registry.macula.io/parksim-worlds-sub
+#         container_name: parksim-worlds-sub
+#         networks:
+#           - dev-net
+    
+
+  orgs-sub:
+    image: registry.macula.io/parksim-orgs-sub
+    container_name: orgs-sub
+    networks: 
+      - dev-net
+    environment:
+      ASPNETCORE_URLS: http://+:5002
+    ports:
+      - 5002:5002
+    env_file: 
+      - ./.env
+      - ./apps/orgs-sub/.env
+    restart: always
+    depends_on: 
+      - nats
+      - couch
+      - eventstore
+
+  orgs-etl:
+    image: registry.macula.io/parksim-orgs-etl
+    container_name: orgs-etl
+    networks: 
+      - dev-net
+    environment:
+      ASPNETCORE_URLS: http://+:6002
+    ports:
+      - 6002:6002
+    env_file: 
+      - ./.env
+      - ./apps/orgs-etl/.env
+    restart: always
+    depends_on: 
+      - nats
+      - couch
+      - eventstore
+
+  orgs-svc:
+    image: registry.macula.io/parksim-orgs-svc
+    container_name: orgs-svc
+    networks: 
+      - dev-net
+    environment:
+      ASPNETCORE_URLS: http://+:8002
+    ports:
+      - 8002:8002
+    env_file: 
+      - ./.env
+      - ./apps/orgs-svc/.env
+    restart: always
+    depends_on: 
+      - couch
+
+
+
+  # orgs-etl:
+  #   image: registry.macula.io/parksim-orgs-etl
+  #   container_name: orgs-sub
+  #   networks: 
+  #     - dev-net
+  #   env_file: 
+  #     - ./apps/orgs-etl/.env
+          
+
+
+
+networks:
+  dev-net:
+    driver: bridge
+  monitor-net:
+    driver: bridge
+  elastic:
+      driver: bridge    
