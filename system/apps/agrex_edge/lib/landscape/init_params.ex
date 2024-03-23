@@ -1,4 +1,4 @@
-defmodule Agrex.Landscape.InitParams do
+defmodule AgrexEdge.Landscape.InitParams do
   @moduledoc """
   Landscape.InitParams is a struct that holds the parameters for initializing a landscape.
   """
@@ -20,7 +20,7 @@ defmodule Agrex.Landscape.InitParams do
     do: europe()
 
   def europe,
-    do: %Agrex.Landscape.InitParams{
+    do: %AgrexEdge.Landscape.InitParams{
       id: "europe",
       edge_id: Agrex.Core.constants()[:edge_id],
       nbr_of_countries: Agrex.Limits.max_regions(),
@@ -30,7 +30,7 @@ defmodule Agrex.Landscape.InitParams do
     }
 
   def asia,
-    do: %Agrex.Landscape.InitParams{
+    do: %AgrexEdge.Landscape.InitParams{
       id: "asia",
       edge_id: Agrex.Core.constants()[:edge_id],
       nbr_of_countries: Agrex.Limits.max_regions(),

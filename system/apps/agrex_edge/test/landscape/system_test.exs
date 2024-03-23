@@ -1,6 +1,6 @@
-defmodule Agrex.Landscape.SystemTest do
+defmodule AgrexEdge.Landscape.SystemTest do
   @moduledoc """
-  This module tests the Agrex.Landscape.System module.
+  This module tests the AgrexEdge.Landscape.System module.
   """
   use ExUnit.Case
 
@@ -14,7 +14,7 @@ defmodule Agrex.Landscape.SystemTest do
   }
 
   @tag :test_landscape_system
-  doctest Agrex.Landscape.System
+  doctest AgrexEdge.Landscape.System
 
   describe "\n[~> Setup the Landscape.System test environment <~]\n" do
     setup %{} do
@@ -29,8 +29,8 @@ defmodule Agrex.Landscape.SystemTest do
 
 
     @tag :test_landscape_system
-    test "\n[== Test that we can start the Agrex.Landscape.System ==]" do
-      res = Agrex.Landscape.System.start_link(@test_landscape_params)
+    test "\n[== Test that we can start the AgrexEdge.Landscape.System ==]" do
+      res = AgrexEdge.Landscape.System.start_link(@test_landscape_params)
 
       case res do
         {:ok, _} ->
@@ -40,18 +40,18 @@ defmodule Agrex.Landscape.SystemTest do
           assert true
       end
 
-      Logger.debug("Agrex.Landscape.System.start_link/1 returned => #{inspect(res)}")
+      Logger.debug("AgrexEdge.Landscape.System.start_link/1 returned => #{inspect(res)}")
     end
 
     @tag :test_landscape_system
-    test "that the Agrex.Landscape.System module exists" do
-      assert is_list(Agrex.Landscape.System.module_info())
+    test "that the AgrexEdge.Landscape.System module exists" do
+      assert is_list(AgrexEdge.Landscape.System.module_info())
     end
 
     @tag :test_landscape_system
     test "that we can start the Landscape.System for a particular landscape" do
       res =
-        Agrex.Landscape.System.start_link(@test_landscape_params)
+        AgrexEdge.Landscape.System.start_link(@test_landscape_params)
 
       inspect(res)
     end

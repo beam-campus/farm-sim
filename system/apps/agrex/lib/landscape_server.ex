@@ -1,5 +1,5 @@
 defmodule Agrex.LandscapeServer do
-  alias Agrex.Landscape.Supervisor
+  alias AgrexEdge.Landscape.Supervisor
   alias Agrex.Schema.Landscape
   use GenServer
 
@@ -10,7 +10,7 @@ defmodule Agrex.LandscapeServer do
       {:add_region, region}
     ) do
       {:ok, landscape} ->
-        Agrex.Landscape.Supervisor.start_child(region)
+        AgrexEdge.Landscape.Supervisor.start_child(region)
     end
   end
 

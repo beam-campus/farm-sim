@@ -1,8 +1,8 @@
-defmodule Agrex.Edge.Application do
+defmodule AgrexEdge.Application do
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   @moduledoc """
-  Agrex.Edge.Application is the main application for the Agrex Edge.
+  AgrexEdge.Application is the main application for the Agrex Edge.
   """
   use Application
 
@@ -28,15 +28,15 @@ defmodule Agrex.Edge.Application do
   @impl Application
   def start(_type, _args) do
 
-    landscape_init = Agrex.Landscape.InitParams.default()
+    landscape_init = AgrexEdge.Landscape.InitParams.default()
 
     children = [
       # Start Finch
       {Finch, name: Agrex.Finch},
-      {Agrex.Edge.Client, landscape_init},
+      {AgrexEdge.Client, landscape_init},
       {Agrex.Countries.Cache, name: Agrex.Countries},
       # Start Landscape System
-      {Agrex.Landscape.System, Agrex.Landscape.InitParams.default()},
+      {AgrexEdge.Landscape.System, AgrexEdge.Landscape.InitParams.default()},
       #  {Agrex.MngHerd.System, Agrex.MngHerd.State.random(@default_edge_id, @default_map)}
       # {Agrex.Born2Died.System, Agrex.Born2Died.State.random(@default_edge_id, @default_map)}
     ]

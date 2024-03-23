@@ -1,6 +1,6 @@
-defmodule Agrex.Landscape.Regions do
+defmodule AgrexEdge.Landscape.Regions do
   @moduledoc """
-  Agrex.Landscape.Regions is the top-level supervisor for the Agrex.MngLandscape subsystem.
+  AgrexEdge.Landscape.Regions is the top-level supervisor for the Agrex.MngLandscape subsystem.
   """
   use GenServer
 

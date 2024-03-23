@@ -1,6 +1,6 @@
-defmodule Agrex.Landscape.Builder do
+defmodule AgrexEdge.Landscape.Builder do
   @moduledoc """
-  Agrex.Landscape.Worker is a GenServer that manages the state of a Landscape.
+  AgrexEdge.Landscape.Worker is a GenServer that manages the state of a Landscape.
   """
   alias Agrex.Countries.Cache
   use GenServer
@@ -19,7 +19,7 @@ defmodule Agrex.Landscape.Builder do
         |> String.downcase()
 
       region_init = Agrex.Region.InitParams.random(region_id)
-      Agrex.Landscape.Regions.start_region(l.id, region_init)
+      AgrexEdge.Landscape.Regions.start_region(l.id, region_init)
     end)
 
     Logger.debug(

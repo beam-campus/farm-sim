@@ -153,9 +153,7 @@ defmodule Agrex.Born2Died.Worker do
   end
 
   defp do_move(state, delta_x, delta_y) do
-    s1 = " \n\t MOVING [#{state.life.name}
-    \n\t\tFROM (#{state.pos.x}, #{state.pos.y}
-    \n\t\tTO (#{state.pos.x + delta_x}, #{state.pos.y + delta_y})]"
+    s1 = " \n MOVING [#{String.slice(state.life.name, 0, 29)}\tFROM: (#{state.pos.x}, #{state.pos.y}) TO: (#{state.pos.x + delta_x}, #{state.pos.y + delta_y})]"
 
     new_state =
       Map.put(state, :pos, do_change_pos(state.pos, delta_x, delta_y))

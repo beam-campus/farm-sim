@@ -2,7 +2,7 @@
 
 ## Description
 
-**Agrex.Landscape.System** is and Agrex.Edge.Application subsystem that is responsible for managing the regions in the landscape.
+**AgrexEdge.Landscape.System** is and AgrexEdge.Application subsystem that is responsible for managing the regions in the landscape.
 
 ## Diagrams
 

@@ -1,4 +1,4 @@
-defmodule Agrex.Edge.MixProject do
+defmodule AgrexEdge.MixProject do
   use Mix.Project
 
   def project do
@@ -26,7 +26,7 @@ defmodule Agrex.Edge.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      mod: {Agrex.Edge.Application, []},
+      mod: {AgrexEdge.Application, []},
       extra_applications: [:logger, :runtime_tools, :observer, :eex, :wx]
     ]
   end

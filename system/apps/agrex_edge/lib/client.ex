@@ -1,10 +1,10 @@
-defmodule Agrex.Edge.Client do
+defmodule AgrexEdge.Client do
   use Slipstream
 
   require Logger
 
   @moduledoc """
-  Agrex.Edge.Client is the client-side of the Agrex.Edge.Socket server.
+  AgrexEdge.Client is the client-side of the AgrexEdge.Socket server.
   It is part of the main application supervision tree.
   """
 

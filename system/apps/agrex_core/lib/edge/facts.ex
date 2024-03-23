@@ -1,7 +1,7 @@
-defmodule Agrex.Edge.Facts do
+defmodule AgrexEdge.Facts do
 
   @moduledoc """
-  Agrex.Edge.Facts is a collection of all facts related to the edge used in the system.
+  AgrexEdge.Facts is a collection of all facts related to the edge used in the system.
   these facts are sent to the backend channel, where they are put on Agrex.PubSub.
   """
 

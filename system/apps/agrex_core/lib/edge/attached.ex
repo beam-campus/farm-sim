@@ -1,11 +1,11 @@
-defmodule Agrex.Edge.Attached do
+defmodule AgrexEdge.Attached do
   use Ecto.Schema
 
   @moduledoc """
-  Agrex.Edge.Attached is a collection of all facts related to the edge used in the system.
+  AgrexEdge.Attached is a collection of all facts related to the edge used in the system.
   """
   alias Agrex.Schema.Meta
-  alias Agrex.Edge.Attached.PayloadV1
+  alias AgrexEdge.Attached.PayloadV1
 
   @topic_v1 "edge:attached:v1"
 

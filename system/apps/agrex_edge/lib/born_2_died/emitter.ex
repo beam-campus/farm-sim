@@ -16,7 +16,7 @@ defmodule Agrex.Born2Died.Emitter do
 
 
   def emit_born(life_id, fact) do
-    Agrex.Edge.Client.publish(
+    AgrexEdge.Client.publish(
       life_id,
       "edge_born_v1",
       fact

@@ -11,8 +11,8 @@ defmodule Agrex.Born2Died.EmitterTest do
   @edge_id "edge-1"
 
   setup_all do
-    res = Agrex.Edge.Client.start_link(@edge_id)
-    Logger.info("Agrex.Edge.Client.start_link/1: #{inspect(res)}")
+    res = AgrexEdge.Client.start_link(@edge_id)
+    Logger.info("AgrexEdge.Client.start_link/1: #{inspect(res)}")
     res
   end
 

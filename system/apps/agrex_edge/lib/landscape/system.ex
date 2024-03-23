@@ -1,6 +1,6 @@
-defmodule Agrex.Landscape.System do
+defmodule AgrexEdge.Landscape.System do
   @moduledoc """
-  Agrex.Landscape.System is the top-level supervisor for the Agrex.MngLandscape subsystem.
+  AgrexEdge.Landscape.System is the top-level supervisor for the Agrex.MngLandscape subsystem.
   """
   use GenServer
 
@@ -8,7 +8,7 @@ defmodule Agrex.Landscape.System do
 
   ################# INTERFACE #############
   def start_europe do
-    case start_link(Agrex.Landscape.InitParams.europe()) do
+    case start_link(AgrexEdge.Landscape.InitParams.europe()) do
       {:ok, pid} ->
         {:ok, pid}
 
@@ -18,7 +18,7 @@ defmodule Agrex.Landscape.System do
   end
 
   def start_asia do
-    case start_link(Agrex.Landscape.InitParams.asia()) do
+    case start_link(AgrexEdge.Landscape.InitParams.asia()) do
       {:ok, pid} ->
         {:ok, pid}
 
@@ -75,8 +75,9 @@ defmodule Agrex.Landscape.System do
     Process.flag(:trap_exit, true)
 
     children = [
-      {Agrex.Landscape.Regions, landscape_init},
-      {Agrex.Landscape.Builder, landscape_init}
+      {AgrexEdge.Landscape.Channel, landscape_init},
+      {AgrexEdge.Landscape.Regions, landscape_init},
+      {AgrexEdge.Landscape.Builder, landscape_init}
     ]
 
     Supervisor.start_link(
@@ -85,9 +86,11 @@ defmodule Agrex.Landscape.System do
       name: via_sup(landscape_id)
     )
 
-    
+    AgrexEdge.Landscape.Channel.attach_landscape(landscape_init)
 
-    Agrex.Landscape.Builder.init_landscape(landscape_init)
+
+
+    AgrexEdge.Landscape.Builder.init_landscape(landscape_init)
 
     {:ok, landscape_init}
   end
@@ -157,7 +160,7 @@ defmodule Agrex.Landscape.System do
   #     DynamicSupervisor.start_child(
   #       __MODULE__,
   #       {
-  #         Agrex.Landscape.Worker,
+  #         AgrexEdge.Landscape.Worker,
   #         landscape_init
   #       }
   #     )
