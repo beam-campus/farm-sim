@@ -1,7 +1,13 @@
 defmodule Agrex.Schema.Landscape do
   use Ecto.Schema
+
+  @moduledoc """
+  Agrex.Schema.Landscape contains the Ecto schema for the landscape.
+  """
+
   import Ecto.Changeset
 
+  alias Agrex.Schema.Edge
   alias Agrex.Schema.Landscape
   alias Agrex.Schema.Id
   alias Agrex.Schema.Region
@@ -10,9 +16,10 @@ defmodule Agrex.Schema.Landscape do
 
   @primary_key false
   embedded_schema do
-    field :id, :string
-    field :name, :string
-    embeds_many :regions, Region
+    field(:id, :string)
+    field(:name, :string)
+    embeds_many(:sourced_by, Edge)
+    embeds_many(:regions, Region)
   end
 
   def random_id() do

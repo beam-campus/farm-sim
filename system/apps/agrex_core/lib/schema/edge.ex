@@ -15,6 +15,8 @@ defmodule Agrex.Schema.Edge do
   @primary_key false
   embedded_schema do
     field :id, :string
+    field :ip_address, :string
+    field :whois, :string
   end
 
   def random_id() do

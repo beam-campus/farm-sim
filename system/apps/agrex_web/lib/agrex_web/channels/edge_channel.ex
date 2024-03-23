@@ -5,41 +5,39 @@ defmodule AgrexWeb.EdgeChannel do
   The EdgeChannel is used to broadcast messages to all clients
   """
 
+  require Logger
+  require Phoenix.PubSub
+  require AgrexEdge.Facts
+
+  alias AgrexWeb.EdgeHandler
+  alias AgrexWeb.EdgePresence
+  alias AgrexCore.Facts
+
   @fact_born "fact:born"
   @fact_died "fact:died"
   @hope_shout "hope:shout"
   @hope_ping "ping"
   @hope_join_edge "join_edge"
-  @edge_attached_v1 "edge:attached:v1"
-  @pubsub_attached_v1 "edge_attached_v1"
+  @edge_attached_v1 Facts.edge_attached_v1()
+  @pubsub_attached_v1 Facts.edge_attached_v1()
 
   @attach_landscape_v1 "attach_landscape:v1"
 
-  require Logger
-  require Phoenix.PubSub
-  require AgrexEdge.Facts
-  alias AgrexWeb.EdgePresence
+
 
   ################ CALLBACKS ################
   @impl true
-  def join("edge:lobby", payload, socket) do
-    Logger.debug("EdgeChannel.join: payload= #{inspect(payload)} socket.assigns= #{inspect(socket.assigns)}")
-    send(self(), :after_join)
-    :ok = AgrexWeb.ChannelWatcher.monitor("edge:lobby", self(), {__MODULE__, :leave, []})
-    {:ok, socket}
-  end
-
-  def leave() do
-    Logger.debug("EdgeChannel.leave: leaving edge:lobby")
-    :ok
-  end
+  def join("edge:lobby", landscape_init, socket),
+    do: EdgeHandler.handle_join("edge:lobby", landscape_init, socket)
 
 
   @impl true
   def handle_info(:after_join, socket) do
-    {:ok, _} = EdgePresence.track(socket, "edge_1", %{
-      online_at: inspect(System.system_time(:second))
-    })
+    {:ok, _} =
+      EdgePresence.track(socket, "edge_1", %{
+        online_at: inspect(System.system_time(:second))
+      })
+
     push(socket, "presence_state", EdgePresence.list(socket))
     {:noreply, socket}
   end

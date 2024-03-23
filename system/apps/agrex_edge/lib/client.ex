@@ -7,9 +7,10 @@ defmodule AgrexEdge.Client do
   AgrexEdge.Client is the client-side of the AgrexEdge.Socket server.
   It is part of the main application supervision tree.
   """
+  alias AgrexCore.Facts
 
   @edge_lobby "edge:lobby"
-  @edge_attached_v1 "edge:attached:v1"
+  @edge_attached_v1 Facts.edge_attached_v1()
   # @joined_edge_lobby "edge:lobby:joined"
 
   ############# API ################
@@ -53,7 +54,6 @@ defmodule AgrexEdge.Client do
 
   @impl Slipstream
   def handle_disconnect(_reason, socket) do
-    SLipstream.
     {:stop, :normal, socket}
   end
 
