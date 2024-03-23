@@ -24,6 +24,9 @@ defmodule AgrexWeb.EdgeSocket do
   # See the [`Channels guide`](https://hexdocs.pm/phoenix/channels.html)
   # for further details.
 
+
+
+
   # Socket params are passed from the client and can
   # be used to verify and authenticate a user. After
   # verification, you can put default assigns into
@@ -46,6 +49,8 @@ defmodule AgrexWeb.EdgeSocket do
     # assign(socket, :edge_id, params.edge_id)
     {:ok, socket}
   end
+
+
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
   #

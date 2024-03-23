@@ -18,11 +18,30 @@ defmodule AgrexWeb.EdgeChannel do
   require Logger
   require Phoenix.PubSub
   require AgrexEdge.Facts
+  alias AgrexWeb.EdgePresence
 
   ################ CALLBACKS ################
   @impl true
-  def join("edge:lobby", _payload, socket) do
+  def join("edge:lobby", payload, socket) do
+    Logger.debug("EdgeChannel.join: payload= #{inspect(payload)} socket.assigns= #{inspect(socket.assigns)}")
+    send(self(), :after_join)
+    :ok = AgrexWeb.ChannelWatcher.monitor("edge:lobby", self(), {__MODULE__, :leave, []})
     {:ok, socket}
+  end
+
+  def leave() do
+    Logger.debug("EdgeChannel.leave: leaving edge:lobby")
+    :ok
+  end
+
+
+  @impl true
+  def handle_info(:after_join, socket) do
+    {:ok, _} = EdgePresence.track(socket, "edge_1", %{
+      online_at: inspect(System.system_time(:second))
+    })
+    push(socket, "presence_state", EdgePresence.list(socket))
+    {:noreply, socket}
   end
 
   @impl true

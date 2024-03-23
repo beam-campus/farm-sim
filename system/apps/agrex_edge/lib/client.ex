@@ -53,6 +53,7 @@ defmodule AgrexEdge.Client do
 
   @impl Slipstream
   def handle_disconnect(_reason, socket) do
+    SLipstream.
     {:stop, :normal, socket}
   end
 

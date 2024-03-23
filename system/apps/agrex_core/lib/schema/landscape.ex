@@ -15,6 +15,11 @@ defmodule Agrex.Schema.Landscape do
     embeds_many :regions, Region
   end
 
+  def random_id() do
+    Id.new(id_prefix())
+    |> Id.as_string()
+  end
+
   def changeset(landscape, args)
       when is_map(args) do
     landscape

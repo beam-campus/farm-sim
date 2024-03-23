@@ -11,9 +11,11 @@ defmodule AgrexWeb.Application do
       # Start the Telemetry supervisor
       AgrexWeb.Telemetry,
       # Start the Endpoint (http/https)
-      AgrexWeb.Endpoint
+      AgrexWeb.EdgePresence,
+      AgrexWeb.Endpoint,
       # Start a worker by calling: AgrexWeb.Worker.start_link(arg)
       # {AgrexWeb.Worker, arg}
+      {AgrexWeb.ChannelWatcher, "edge:lobby"}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

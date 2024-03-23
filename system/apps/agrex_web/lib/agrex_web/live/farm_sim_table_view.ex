@@ -10,7 +10,7 @@ defmodule AgrexWeb.FarmSimTableView do
   def render(assigns) do
     ~H"""
     <div class="h-screen">
-    <h2>FARMING LANDSCAPES  (connected: <%= @edge_count  %>) </h2>
+    <h2>FARMING LANDSCAPES  (edges connected: <%= @edge_count  %>) </h2>
       <div>
         <div class="flex-grow flex flex-row h-58">
           <.live_component module={AgrexWeb.LandscapesBrowser} id="landscapes_browser" />
