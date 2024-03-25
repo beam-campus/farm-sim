@@ -7,7 +7,35 @@ defmodule Agrex.System.MixProject do
       version: "0.1.0",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      aliases: aliases()
+      aliases: aliases(),
+      releases: releases()
+    ]
+  end
+
+  defp releases do
+    [
+      for_web: [
+        include_executables_for: [:unix],
+        steps: [:assemble, :tar],
+        applications: [
+          runtime_tools: :permanent,
+          logger: :permanent,
+          observer: :permanent,
+          os_mon: :permanent,
+          agrex_web: :permanent
+        ]
+      ],
+      for_edge: [
+        include_executables_for: [:unix],
+        steps: [:assemble, :tar],
+        applications: [
+          runtime_tools: :permanent,
+          logger: :permanent,
+          observer: :permanent,
+          os_mon: :permanent,
+          agrex_edge: :permanent
+        ]
+      ]
     ]
   end
 
@@ -27,6 +55,7 @@ defmodule Agrex.System.MixProject do
     [
       # Required to run "mix format" on ~H/.heex files from the umbrella root
       {:phoenix_live_view, ">= 0.0.0"}
+      # {:distillery, "~> 2.1"}
     ]
   end
 
@@ -45,5 +74,4 @@ defmodule Agrex.System.MixProject do
       setup: ["cmd mix setup"]
     ]
   end
-  
 end

@@ -9,7 +9,6 @@
 # move said applications out of the umbrella.
 import Config
 
-
 # Configure the Agrex application socket communication,
 # please note the "websocket" part of the URI, this is
 # required for the socket to work.
@@ -20,7 +19,6 @@ config :agrex_edge, AgrexEdge.Client,
 # Configure the basic settings of the application
 config :agrex_core,
   edge_id: "edge_1"
-
 
 # Configure Mix tasks and generators
 config :agrex,
@@ -35,15 +33,14 @@ config :agrex,
 # at the `config/runtime.exs`.
 config :agrex, Agrex.Mailer, adapter: Swoosh.Adapters.Local
 
-config :agrex, event_stores: [Agrex.MilkToAnalyse.EventStore]
+config :agrex, Agrex.EventStore, event_stores: [Agrex.MilkToAnalyse.EventStore]
 
-
-config :agrex_web,
-  ecto_repos: [Agrex.Repo],
-  generators: [context_app: :agrex]
+config :agrex, Agrex.Repo, ecto_repos: [Agrex.Repo]
 
 # Configures the endpoint
 config :agrex_web, AgrexWeb.Endpoint,
+  adapter: Phoenix.Endpoint.Cowboy2Adapter,
+  server: true,
   url: [host: "localhost"],
   render_errors: [
     formats: [html: AgrexWeb.ErrorHTML, json: AgrexWeb.ErrorJSON],
@@ -51,6 +48,10 @@ config :agrex_web, AgrexWeb.Endpoint,
   ],
   pubsub_server: Agrex.PubSub,
   live_view: [signing_salt: "QIZFAMFl"]
+
+config :agrex_web, Agrex.Repo,
+  ecto_repos: [Agrex.Repo],
+  generators: [context_app: :agrex]
 
 # Configure esbuild (the version is required)
 config :esbuild,

@@ -19,7 +19,7 @@ defmodule AgrexEdgeTui.MixProject do
   def application do
     [
 
-      extra_applications: [:logger, :runtime_tools, :eex, :wx]
+      extra_applications: [:logger, :runtime_tools, :eex]
     ]
   end
 

@@ -27,7 +27,7 @@ defmodule AgrexEdge.MixProject do
   def application do
     [
       mod: {AgrexEdge.Application, []},
-      extra_applications: [:logger, :runtime_tools, :observer, :eex, :wx]
+      extra_applications: [:logger, :runtime_tools, :observer, :eex]
     ]
   end
 

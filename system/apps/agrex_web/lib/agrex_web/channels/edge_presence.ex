@@ -5,8 +5,6 @@ defmodule AgrexWeb.EdgePresence do
   @moduledoc """
   The EdgePresence is used to broadcast messages to all clients
   """
-
-
   require Logger
 
 

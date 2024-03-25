@@ -29,6 +29,7 @@ config :agrex_web, AgrexWeb.Endpoint,
   code_reloader: true,
   debug_errors: true,
   secret_key_base: "KW5hHz6cmGbMeAWgHu0L5zam3ll+uXw3NqQ4Dd5iFHllsondZySRqoeiInSMAvmZ",
+  server: true,
   watchers: [
     esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}

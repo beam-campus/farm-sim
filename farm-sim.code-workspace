@@ -2,6 +2,18 @@
 	"folders": [
 		{
 			"path": "."
+		},
+		{
+			"path": "../compose-dev-stack"
+		},
+		{
+			"path": "../logatron"
+		},
+		{
+			"path": "../logatron_web"
+		},
+		{
+			"path": "../letsencrypt-docker-compose"
 		}
 	],
 	"settings": {

@@ -8,7 +8,7 @@ defmodule Agrex.Application do
   def start(_type, _args) do
     children = [
       # Start the Ecto repository
-      Agrex.Repo,
+      # Agrex.Repo,
       # Start Finch
       {Finch, name: Agrex.Finch},
     ]

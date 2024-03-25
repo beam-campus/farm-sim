@@ -32,7 +32,7 @@ defmodule Agrex.MixProject do
   def application do
     [
       mod: {Agrex.Application, []},
-      extra_applications: [:logger, :runtime_tools, :observer, :eex, :wx]
+      extra_applications: [:logger, :runtime_tools, :observer, :eex, :ecto]
     ]
   end
 

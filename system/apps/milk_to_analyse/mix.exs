@@ -17,7 +17,7 @@ defmodule MilkToAnalyse.MixProject do
 
       # ExDoc
       name: "Milk-to-Ananlyze Service",
-      source_url: "https://github.com/discomco-ex/farm-sim",
+      source_url: "https://github.com/beam-campus/farm-sim",
       homepage_url: "https://discomco.pl",
       docs: [
         main: "Agrex",
@@ -29,7 +29,12 @@ defmodule MilkToAnalyse.MixProject do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
-      extra_applications: [:logger, :runtime_tools, :observer, :eex, :wx],
+      extra_applications: [
+        :logger,
+        :runtime_tools,
+        :observer,
+        :eex
+      ],
       mod: {MilkToAnalyse.Application, []}
     ]
   end

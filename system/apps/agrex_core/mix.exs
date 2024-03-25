@@ -27,7 +27,7 @@ defmodule Agrex.Core.MixProject do
   def application do
     [
       mod: {Agrex.Core.Application, []},
-      extra_applications: [:logger, :eex, :wx]
+      extra_applications: [:logger, :eex]
     ]
   end
 
@@ -43,6 +43,7 @@ defmodule Agrex.Core.MixProject do
       {:uuid, "~> 1.1"},
       {:jason, "~> 1.3"},
       {:req, "~> 0.4.5"},
+      {:hackney, "~> 1.9"},
       {:dialyze, "~> 0.2.0", only: [:dev]},
       {:mix_test_watch, "~> 1.1", only: [:dev, :test], runtime: false},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},

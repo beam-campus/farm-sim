@@ -31,28 +31,5 @@ defmodule AgrexWeb.LandscapesBrowser do
     """
   end
 
-  # @impl true
-  # def render(assigns) do
-  #   ~H"""
-  #   <div id="LsCa" phx-hook="LandscapesCarousel">
-  #     <div class="swiper-container">
-  #       <div class="swiper-wrapper whitespace-nowrap">
-  #         <%= for ls_index <- 1..@no_landscapes do %>
-  #           <div class="swiper-slide bg-blue-100 rounded p-2 gap-4">
-  #             <.live_component
-  #               module={AgrexWeb.LandscapeCard}
-  #               id={"landscape_#{inspect(ls_index)}"}
-  #               ls_index={ls_index}
-  #             />
-  #           </div>
-  #         <% end %>
-  #       </div>
-  #       <!-- Add pagination bullets if needed -->
-  #       <div class="swiper-pagination"></div>
-  #       <div class="swiper-button-prev"></div>
-  #       <div class="swiper-button-next"></div>
-  #     </div>
-  #   </div>
-  #   """
-  # end
+
 end

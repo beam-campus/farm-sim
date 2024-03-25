@@ -1,20 +1,23 @@
 defmodule AgrexWeb.Application do
+  use Application, otp_app: :agrex_web
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
-  @moduledoc false
+  @moduledoc"""
+  The main application module for AgrexWeb.
+  """
 
-  use Application
+
 
   @impl true
   def start(_type, _args) do
     children = [
       # Start the Telemetry supervisor
       AgrexWeb.Telemetry,
+
       # Start the Endpoint (http/https)
       AgrexWeb.EdgePresence,
       AgrexWeb.Endpoint,
-      # Start a worker by calling: AgrexWeb.Worker.start_link(arg)
-      # {AgrexWeb.Worker, arg}
+      
       {AgrexWeb.ChannelWatcher, "edge:lobby"}
     ]
 

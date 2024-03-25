@@ -9,7 +9,7 @@ defmodule AgrexWeb.MixProject do
       config_path: "../../config/config.exs",
       deps_path: "../../deps",
       lockfile: "../../mix.lock",
-      elixir: "~> 1.14",
+      elixir: "~> 1.16",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -23,7 +23,12 @@ defmodule AgrexWeb.MixProject do
   def application do
     [
       mod: {AgrexWeb.Application, []},
-      extra_applications: [:logger, :runtime_tools, :os_mon]
+      extra_applications: [
+        :logger,
+        :runtime_tools,
+        :observer,
+        :os_mon
+      ]
     ]
   end
 
@@ -40,13 +45,15 @@ defmodule AgrexWeb.MixProject do
       {:phoenix_ecto, "~> 4.5.1"},
       {:ecto_sql, "~> 3.7"},
       {:postgrex, ">= 0.0.0"},
-      {:floki, ">= 0.36.1", only: :test},
+      {:floki, ">= 0.36.1" },
       {:phoenix_html, "~> 4.1.1"},
       {:phoenix_live_reload, "~> 1.5.2", only: :dev},
       {:phoenix_live_view, "~> 0.20.14"},
       {:phoenix_live_dashboard, "~> 0.8.3"},
-      {:esbuild, "~> 0.7", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
+      # {:esbuild, "~> 0.7", runtime: Mix.env() == :dev},
+      # {:tailwind, "~> 0.2.0", runtime: Mix.env() == :dev},
+      {:esbuild, "~> 0.7"},
+      {:tailwind, "~> 0.2.0"},
       {:telemetry_metrics, "~> 0.6"},
       {:telemetry_poller, "~> 1.0"},
       {:gettext, "~> 0.20"},
@@ -54,7 +61,7 @@ defmodule AgrexWeb.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:contex, "~> 0.5.0"},
       {:heroicons, "~> 0.5.5"},
-      {:heroicons_liveview, "~> 0.5.0"},
+      {:heroicons_liveview, "~> 0.5.0"}
     ]
   end
 

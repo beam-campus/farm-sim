@@ -14,7 +14,7 @@ if config_env() == :prod do
       For example: /etc/agrex/agrex.db
       """
 
-  config :agrex, Agrex.Repo,
+  config :agrex, ecto_repos: [Agrex.Repo],
     database: database_path,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "5")
 
@@ -37,6 +37,7 @@ if config_env() == :prod do
       ip: {0, 0, 0, 0, 0, 0, 0, 0},
       port: String.to_integer(System.get_env("PORT") || "4000")
     ],
+    server: true,
     secret_key_base: secret_key_base
 
   # ## Using releases
