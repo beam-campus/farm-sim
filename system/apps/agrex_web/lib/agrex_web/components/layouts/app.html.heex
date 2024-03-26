@@ -1,16 +1,32 @@
-<header class="px-4 sm:px-6 lg:px-8">
-  <div class="flex items-center justify-between py-3 text-sm border-b border-zinc-100">
-      <a href="/">
-        <img src={~p"/images/logo.svg"} width="36" />
-      </a>
-    <div class="flex items-center gap-4">
 
+<header class="flex justify-between items-center py-4">
+   <div class="w-15 border-orange-200 py-3 border-b-2">
+     <div>
+       <.svg_logo />
+     </div>
+     <div>
+     </div>    
+   </div>
+</header>
+
+<!-- header class="px-4 sm:px-6 lg:px-8">
+  
+  <div class="flex items-center justify-between py-3 text-sm border-b border-orange-200">
+    <div class="flex items-left w-60 h-25 justify-between">
+      <.svg_logo>
+        <%= assigns[:height] || 15 %>
+        <%= assigns[:width] || 60  %>  
+      </.svg_logo>
+    </div>
+    <div class="flex items-center gap-4">
       <p class="px-16 font-medium leading-6 rounded-full bg-brand/5 text-brand">
         Logatron IoT Landscape Simulator
       </p>
     </div>
   </div>
-</header>
+
+</header -->
+
 <main class="px-4 py-20 sm:px-6 lg:px-8">
   <div class="max-w-2xl mx-auto">
     <.flash_group flash={@flash} />

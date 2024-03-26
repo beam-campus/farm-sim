@@ -7,7 +7,7 @@ import Config
 # before starting your production server.
 config :agrex_web, AgrexWeb.Endpoint,
   url: [
-    host: "logatron.io",
+    host: "logatron",
     port: 4000
   ],
   cache_static_manifest: "priv/static/cache_manifest.json"
