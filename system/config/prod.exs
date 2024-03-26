@@ -6,7 +6,10 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :agrex_web, AgrexWeb.Endpoint,
-  url: [host: "logatron.io", port: 443],
+  url: [
+    host: "logatron.io",
+    port: 4000
+  ],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 config :agrex_web, Agrex.Repo,
