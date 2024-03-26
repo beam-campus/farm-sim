@@ -11,9 +11,6 @@
 		},
 		{
 			"path": "../logatron_web"
-		},
-		{
-			"path": "../letsencrypt-docker-compose"
 		}
 	],
 	"settings": {
